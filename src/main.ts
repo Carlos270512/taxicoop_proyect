@@ -7,6 +7,7 @@ import { registerModels } from './lib/Shared/infrastructure/database/models.regi
 import socioRoutes from './lib/Socio/infrastructure/socio.routes';
 import unidadRoutes from './lib/Socio/infrastructure/unidad.routes';
 import emergencyRoutes from './lib/Emergencia/infrastructure/emergency.routes';
+import authRoutes from './lib/Auth/infrastructure/auth.routes';
 
 dotenv.config();
 
@@ -43,6 +44,7 @@ async function bootstrap() {
     app.use('/api/socios', socioRoutes);
     app.use('/api/unidades', unidadRoutes);
     app.use('/api/emergencias', emergencyRoutes);
+    app.use('/api/auth', authRoutes);
 
     // Levantar servidor
     app.listen(PORT, () => {
