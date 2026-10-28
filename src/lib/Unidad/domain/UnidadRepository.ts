@@ -1,4 +1,4 @@
-import { Unidad } from './Unidad';
+import { Unidad } from '../domain/Unidad';
 
 export interface UnidadRepository {
   save(unidad: Unidad): Promise<Unidad>;

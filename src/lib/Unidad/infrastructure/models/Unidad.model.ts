@@ -1,6 +1,6 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../../Shared/infrastructure/database/sequelize.config';
-import { SocioModel } from './Socio.model';
+import { SocioModel } from '../../../Socio/infrastructure/models/Socio.model';
 
 export class UnidadModel extends Model {
   declare id: string;

@@ -5,7 +5,7 @@ import { sequelize, createDatabaseIfNotExists } from './lib/Shared/infrastructur
 import { connectMongo } from './lib/Shared/infrastructure/database/mongoose.config';
 import { registerModels } from './lib/Shared/infrastructure/database/models.registry';
 import socioRoutes from './lib/Socio/infrastructure/socio.routes';
-import unidadRoutes from './lib/Socio/infrastructure/unidad.routes';
+import unidadRoutes from './lib/Unidad/infrastructure/unidad.routes';
 import emergencyRoutes from './lib/Emergencia/infrastructure/emergency.routes';
 import authRoutes from './lib/Auth/infrastructure/auth.routes';
 

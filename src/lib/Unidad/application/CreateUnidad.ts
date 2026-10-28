@@ -1,6 +1,6 @@
 import { UnidadRepository } from '../domain/UnidadRepository';
 import { Unidad } from '../domain/Unidad';
-import { SocioRepository } from '../domain/SocioRepository';
+import { SocioRepository } from '../../Socio/domain/SocioRepository';
 import { v4 as uuidv4 } from 'uuid';
 
 export class CreateUnidadUseCase {

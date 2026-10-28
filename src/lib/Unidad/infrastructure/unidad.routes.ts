@@ -1,6 +1,6 @@
 import { Router, Request, Response } from 'express';
-import { SequelizeUnidadRepository } from './repositories/SequelizeUnidadRepository';
-import { SequelizeSocioRepository } from './repositories/SequelizeSocioRepository';
+import { SequelizeUnidadRepository } from '../infrastructure/repositories/SequelizeUnidadRepository';
+import { SequelizeSocioRepository } from '../../Socio/infrastructure/repositories/SequelizeSocioRepository';
 import { CreateUnidadUseCase } from '../application/CreateUnidad';
 import { GetAllUnidadesUseCase } from '../application/GetAllUnidades';
 

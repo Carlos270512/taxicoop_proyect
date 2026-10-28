@@ -3,7 +3,7 @@ import { sequelize } from '../../../Shared/infrastructure/database/sequelize.con
 
 export class RoleModel extends Model {
   declare id: string;
-  declare nombre: string; // Ej: ADMIN, DIRECTIVA, SOCIO
+  declare nombre: string; 
   declare descripcion: string;
 }
 

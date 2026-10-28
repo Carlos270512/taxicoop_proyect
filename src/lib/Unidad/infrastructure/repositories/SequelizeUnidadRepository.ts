@@ -1,7 +1,7 @@
 import { UnidadRepository } from '../../domain/UnidadRepository';
 import { Unidad } from '../../domain/Unidad';
 import { UnidadModel } from '../models/Unidad.model';
-import { SocioModel } from '../models/Socio.model';
+import { SocioModel } from '../../../Socio/infrastructure/models/Socio.model';
 
 export class SequelizeUnidadRepository implements UnidadRepository {
   async save(unidad: Unidad): Promise<Unidad> {
