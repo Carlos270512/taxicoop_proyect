@@ -7,7 +7,7 @@ import { registerModels } from './lib/Shared/infrastructure/database/models.regi
 import socioRoutes from './lib/Socio/infrastructure/socio.routes';
 import unidadRoutes from './lib/Unidad/infrastructure/unidad.routes';
 import emergencyRoutes from './lib/Emergencia/infrastructure/emergency.routes';
-import authRoutes from './lib/Auth/infrastructure/auth.routes';
+import authRoutes from './lib/Identity/infrastructure/auth.routes';
 
 dotenv.config();
 
