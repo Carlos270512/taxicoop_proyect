@@ -1,8 +1,10 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../../Shared/infrastructure/database/sequelize.config';
+import { UserAuthModel } from '../../../Identity/infrastructure/models/UserAuth.model'; 
 
 export class SocioModel extends Model {
   declare id: string;
+  declare userId: string;
   declare cedulaRuc: string;
   declare nombres: string;
   declare apellidos: string;
@@ -16,6 +18,14 @@ SocioModel.init(
       type: DataTypes.UUID,
       defaultValue: DataTypes.UUIDV4,
       primaryKey: true,
+    },
+    userId: {
+      type: DataTypes.UUID,
+      allowNull: false,
+      unique: true, 
+      field: 'user_id',
+      onUpdate: 'CASCADE',
+      onDelete: 'CASCADE',
     },
     cedulaRuc: {
       type: DataTypes.STRING(20),

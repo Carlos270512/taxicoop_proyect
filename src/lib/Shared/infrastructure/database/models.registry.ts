@@ -9,6 +9,7 @@ import '../../../Votacion/infrastructure/models/Election.model';
 import '../../../Votacion/infrastructure/models/Option.model';
 import '../../../Votacion/infrastructure/models/Vote.model';
 import '../../../Votacion/infrastructure/models/associations';
+import '../../../Socio/infrastructure/models/associations';
 
 
 export function registerModels() {

@@ -6,6 +6,7 @@ export class SequelizeSocioRepository implements SocioRepository {
   async save(socio: Socio): Promise<Socio> {
     await SocioModel.create({
       id: socio.id,
+      userId: socio.userId,
       cedulaRuc: socio.cedulaRuc,
       nombres: socio.nombres,
       apellidos: socio.apellidos,
@@ -18,13 +19,13 @@ export class SequelizeSocioRepository implements SocioRepository {
   async findAll(): Promise<Socio[]> {
     const socioModels = await SocioModel.findAll();
     return socioModels.map(
-      (m) => new Socio(m.id, m.cedulaRuc, m.nombres, m.apellidos, m.telefono, m.estado)
+      (m) => new Socio(m.id, m.userId, m.cedulaRuc, m.nombres, m.apellidos, m.telefono, m.estado)
     );
   }
 
   async findById(id: string): Promise<Socio | null> {
     const m = await SocioModel.findByPk(id);
     if (!m) return null;
-    return new Socio(m.id, m.cedulaRuc, m.nombres, m.apellidos, m.telefono, m.estado);
+    return new Socio(m.id, m.userId, m.cedulaRuc, m.nombres, m.apellidos, m.telefono, m.estado);
   }
 }
