@@ -21,25 +21,25 @@ export class SequelizeAuthRepository implements AuthRepository {
   }
 
  async saveUser(user: UserAuth): Promise<UserAuth> {
-    // 1. Creamos el usuario base
     const userModel = await UserAuthModel.create({
       id: user.id,
       email: user.email,
       passwordHash: user.passwordHash,
     });
     
-    // 2. Insertamos la relación directamente en la tabla pivote
-    if (user.roles.length > 0) {
+    if (user.roles && user.roles.length > 0) {
       const roleModels = await RoleModel.findAll({
         where: { id: user.roles.map(r => r.id) }
       });
 
-      for (const role of roleModels) {
-        await UserRoleModel.create({
-          userId: userModel.id,
-          roleId: role.id,
-        });
-      }
+      await Promise.all(
+        roleModels.map(role => 
+          UserRoleModel.create({
+            userId: userModel.id,
+            roleId: role.id,
+          })
+        )
+      );
     }
 
     return user;

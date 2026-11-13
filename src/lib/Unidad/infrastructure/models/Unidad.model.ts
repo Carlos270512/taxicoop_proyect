@@ -40,7 +40,7 @@ UnidadModel.init(
         key: 'id',
       },
       onUpdate: 'CASCADE',
-      onDelete: 'RESTRICT', //un socio no se borra si tiene unidades activas
+      onDelete: 'RESTRICT',
     },
     estado: {
       type: DataTypes.ENUM('OPERATIVA', 'EN_TRAMITE', 'SUSPENDIDA'),

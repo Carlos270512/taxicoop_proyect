@@ -8,6 +8,7 @@ import socioRoutes from './lib/Socio/infrastructure/socio.routes';
 import unidadRoutes from './lib/Unidad/infrastructure/unidad.routes';
 import emergencyRoutes from './lib/Emergencia/infrastructure/emergency.routes';
 import authRoutes from './lib/Identity/infrastructure/auth.routes';
+import votacionRouter from './lib/Votacion/infrastructure/votacion.routes';
 
 dotenv.config();
 
@@ -41,10 +42,12 @@ async function bootstrap() {
         timestamp: new Date().toISOString()
       });
     });
+     app.use('/api/votacion', votacionRouter);
     app.use('/api/socios', socioRoutes);
     app.use('/api/unidades', unidadRoutes);
     app.use('/api/emergencias', emergencyRoutes);
     app.use('/api/auth', authRoutes);
+   
 
     // Levantar servidor
     app.listen(PORT, () => {

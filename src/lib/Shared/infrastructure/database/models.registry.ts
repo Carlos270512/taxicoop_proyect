@@ -4,6 +4,11 @@ import '../../../Socio/infrastructure/models/Socio.model';
 import '../../../Unidad/infrastructure/models/Unidad.model';
 import '../../../Identity/infrastructure/models/Role.model';
 import '../../../Identity/infrastructure/models/UserRole.model';
+import '../../../Identity/infrastructure/models/associations';
+import '../../../Votacion/infrastructure/models/Election.model';
+import '../../../Votacion/infrastructure/models/Option.model';
+import '../../../Votacion/infrastructure/models/Vote.model';
+import '../../../Votacion/infrastructure/models/associations';
 
 
 export function registerModels() {
