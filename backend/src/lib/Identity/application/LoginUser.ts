@@ -31,7 +31,11 @@ export class LoginUserUseCase {
       throw new Error('Credenciales inválidas (contraseña incorrecta).');
     }
 
-    const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_key_taxicoop';
+    const JWT_SECRET = process.env.JWT_SECRET;
+    if (!JWT_SECRET) {
+      throw new Error('JWT_SECRET no está configurado en el entorno.');
+    }
+
     const rolesNames = user.roles ? user.roles.map((r) => r.nombre) : [];
 
     const token = jwt.sign(

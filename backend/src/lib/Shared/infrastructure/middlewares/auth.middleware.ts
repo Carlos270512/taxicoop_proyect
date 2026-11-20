@@ -17,7 +17,11 @@ export const authenticateJWT = (req: AuthenticatedRequest, res: Response, next: 
   }
 
   const token = authHeader.split(' ')[1];
-  const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_key_taxicoop';
+  const JWT_SECRET = process.env.JWT_SECRET;
+
+  if (!JWT_SECRET) {
+    return res.status(500).json({ success: false, error: 'JWT_SECRET no está configurado en el entorno.' });
+  }
 
   try {
     const decoded = jwt.verify(token, JWT_SECRET) as any;
