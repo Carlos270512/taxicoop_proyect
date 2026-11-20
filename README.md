@@ -15,6 +15,26 @@ taxicoop_proyect/
 └── README.md
 ```
 
+## Levantar todo con Docker (un solo comando)
+
+```bash
+cp .env.example .env      # completar POSTGRES_PASSWORD y JWT_SECRET
+docker compose up -d --build
+```
+
+- Panel: `http://localhost:8080` (o el puerto que definas en `FRONTEND_PUBLISHED_PORT`).
+- API a través de Nginx: `http://localhost:8080/api/...` (el front usa rutas relativas
+  `/api`, así que no hay que recompilarlo por entorno ni hay problemas de CORS).
+- PostgreSQL y MongoDB viven en la red interna de Docker, sin puertos publicados.
+- Datos persistentes en los volúmenes `pg_data` y `mongo_data`.
+
+```bash
+docker compose ps                 # estado de los servicios
+docker compose logs -f backend    # logs en vivo
+docker compose down               # apaga (conserva datos)
+docker compose down -v            # apaga y borra los datos
+```
+
 ## Backend — `backend/`
 
 API con arquitectura hexagonal por módulos (`domain` / `application` / `infrastructure`).
