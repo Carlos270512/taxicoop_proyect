@@ -20,9 +20,9 @@ import {
   UserRound,
 } from 'lucide-react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { useAuth } from './AuthContext';
-import { PoleLogo } from './PoleLogo';
-import '../../styles/login.css';
+import { useAuth } from '../context/AuthProvider';
+import { PoleLogo } from '../components/PoleLogo';
+import '../../../styles/login.css';
 
 const perks = [
   { icon: ShieldCheck, label: 'Acceso seguro con token' },

@@ -5,7 +5,7 @@ import {
   BadgeDollarSign, LayoutDashboard, CarFront, UsersRound, UserRound,
   Route, ChartNoAxesCombined, Settings, Bell, Search, ChevronDown, LogOut, ShieldCheck,
 } from 'lucide-react';
-import { useAuth } from '../features/auth/AuthContext';
+import { useAuth } from '@features/auth';
 
 const navigation = [
   { label: 'Panel principal', path: '/', icon: LayoutDashboard },

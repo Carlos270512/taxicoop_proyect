@@ -1,9 +1,9 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
-import { DashboardLayout } from '../layouts/DashboardLayout';
-import { DashboardPage } from '../features/dashboard/DashboardPage';
-import { ModulePage } from '../features/dashboard/ModulePage';
-import { LoginPage } from '../features/auth/LoginPage';
-import { RequireAuth } from '../features/auth/AuthContext';
+import { DashboardLayout } from '@layouts/DashboardLayout';
+import { RequireAuth } from '@features/auth';
+import { LoginPage } from '@features/auth/pages/LoginPage';
+import { DashboardPage } from '@features/dashboard/pages/DashboardPage';
+import { ModulePage } from './ModulePage';
 
 export const router = createBrowserRouter([
   { path: '/login', element: <LoginPage /> },

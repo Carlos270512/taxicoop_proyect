@@ -1,5 +1,5 @@
 import axios, { type AxiosError } from 'axios';
-import { clearSession, getToken } from './session';
+import { clearSession, getToken } from '../auth/session';
 
 export const api = axios.create({
   baseURL: import.meta.env.VITE_API_URL || '/api',

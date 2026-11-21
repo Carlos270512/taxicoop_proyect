@@ -1,23 +1,10 @@
 import { createContext, useCallback, useContext, useMemo, useState, type ReactNode } from 'react';
 import axios from 'axios';
 import { Navigate, Outlet, useLocation } from 'react-router-dom';
-import { api } from '../../services/api';
-import { clearSession, readSession, saveSession, type SessionUser } from '../../services/session';
-
-export type AuthUser = {
-  name: string;
-  email: string;
-  role: string;
-  initials: string;
-};
-
-type LoginEnvelope = {
-  success: boolean;
-  data: {
-    token: string;
-    user: SessionUser;
-  };
-};
+import { clearSession, readSession, saveSession } from '@shared/auth/session';
+import type { SessionUser } from '@shared/auth/session';
+import { authApi } from '../api/auth.api';
+import type { AuthUser } from '../model/types';
 
 function toAuthUser(user: SessionUser): AuthUser {
   const local = user.email.split('@')[0] || user.email;
@@ -61,12 +48,9 @@ export function AuthProvider({ children }: { children: ReactNode }) {
 
   const signIn = useCallback(async (email: string, password: string, remember: boolean) => {
     try {
-      const { data } = await api.post<LoginEnvelope>('/auth/login', {
-        email: email.trim(),
-        password,
-      });
-      saveSession(data.data, remember);
-      const nextUser = toAuthUser(data.data.user);
+      const session = await authApi.login(email.trim(), password);
+      saveSession(session, remember);
+      const nextUser = toAuthUser(session.user);
       setUser(nextUser);
       return nextUser;
     } catch (error) {
