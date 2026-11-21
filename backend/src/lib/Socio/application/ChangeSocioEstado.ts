@@ -1,10 +1,14 @@
 import { SocioRepository } from '../domain/SocioRepository';
+import { UnidadRepository } from '../../Unidad/domain/UnidadRepository';
 import { Socio } from '../domain/Socio';
 import { HttpError } from '../../Shared/domain/HttpError';
 import { parseEstado } from './socio.validation';
 
 export class ChangeSocioEstadoUseCase {
-  constructor(private readonly socioRepository: SocioRepository) {}
+  constructor(
+    private readonly socioRepository: SocioRepository,
+    private readonly unidadRepository: UnidadRepository
+  ) {}
 
   async run(id: string, estado: unknown): Promise<Socio> {
     const nuevoEstado = parseEstado(estado);
@@ -18,6 +22,12 @@ export class ChangeSocioEstadoUseCase {
     if (!updated) {
       throw new HttpError(404, 'Socio no encontrado.');
     }
+
+    // Un socio suspendido o retirado no puede tener unidades operando
+    if (nuevoEstado !== 'ACTIVO') {
+      await this.unidadRepository.suspendBySocioId(id);
+    }
+
     return updated;
   }
 }

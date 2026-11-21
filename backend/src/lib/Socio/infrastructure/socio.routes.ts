@@ -1,5 +1,6 @@
 import { Router, Response } from 'express';
 import { SequelizeSocioRepository } from './repositories/SequelizeSocioRepository';
+import { SequelizeUnidadRepository } from '../../Unidad/infrastructure/repositories/SequelizeUnidadRepository';
 import { CreateSocioUseCase } from '../application/CreateSocio';
 import { GetAllSociosUseCase } from '../application/GetAllSocios';
 import { GetSocioByIdUseCase } from '../application/GetSocioById';
@@ -13,12 +14,13 @@ const router = Router();
 
 // Inyección de dependencias manual
 const socioRepository = new SequelizeSocioRepository();
+const unidadRepository = new SequelizeUnidadRepository();
 const createSocioUseCase = new CreateSocioUseCase(socioRepository);
 const getAllSociosUseCase = new GetAllSociosUseCase(socioRepository);
 const getSocioByIdUseCase = new GetSocioByIdUseCase(socioRepository);
 const updateSocioUseCase = new UpdateSocioUseCase(socioRepository);
-const changeSocioEstadoUseCase = new ChangeSocioEstadoUseCase(socioRepository);
-const retireSocioUseCase = new RetireSocioUseCase(socioRepository);
+const changeSocioEstadoUseCase = new ChangeSocioEstadoUseCase(socioRepository, unidadRepository);
+const retireSocioUseCase = new RetireSocioUseCase(socioRepository, unidadRepository);
 
 function fail(res: Response, error: unknown) {
   let status = 500;

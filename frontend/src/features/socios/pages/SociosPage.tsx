@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import { Plus, ShieldAlert, UsersRound } from 'lucide-react';
+import { useNavigate } from 'react-router-dom';
 import { Button } from '@components/Button';
 import { EmptyState } from '@components/EmptyState';
 import { Modal } from '@components/Modal';
@@ -16,6 +17,7 @@ import { useSocioMutations, useSocios } from '../hooks/useSocios';
 
 export function SociosPage() {
   const { user } = useAuth();
+  const navigate = useNavigate();
   const canManage = user?.roles.includes('ADMIN') ?? false;
 
   const [filters, setFilters] = useState<SocioFilters>(EMPTY_SOCIO_FILTERS);
@@ -130,6 +132,7 @@ export function SociosPage() {
           <SociosTable
             socios={socios}
             canManage={canManage}
+            onViewUnidades={(socio) => navigate(`/vehiculos?socioId=${socio.id}`)}
             onEdit={(socio) => { setFormError(null); setModal({ mode: 'edit', socio }); }}
             onToggleEstado={handleToggleEstado}
             onRetire={setToRetire}

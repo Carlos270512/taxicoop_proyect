@@ -1,4 +1,5 @@
 import { HttpError } from '../../Shared/domain/HttpError';
+import { parsePagination as parsePaginationShared } from '../../Shared/application/pagination';
 import { SOCIO_ESTADOS, SocioEstado } from '../domain/Socio';
 
 const NAME_PATTERN = /^[A-Za-zÁÉÍÓÚÜÑáéíóúüñ'.\s-]{2,100}$/;
@@ -58,11 +59,5 @@ export function parseEstado(value: unknown, fallback?: SocioEstado): SocioEstado
 }
 
 export function parsePagination(page?: unknown, limit?: unknown): { page: number; limit: number } {
-  const parsedPage = Number(page ?? 1);
-  const parsedLimit = Number(limit ?? 20);
-
-  const safePage = Number.isFinite(parsedPage) && parsedPage > 0 ? Math.floor(parsedPage) : 1;
-  const safeLimit = Number.isFinite(parsedLimit) && parsedLimit > 0 ? Math.min(Math.floor(parsedLimit), 100) : 20;
-
-  return { page: safePage, limit: safeLimit };
+  return parsePaginationShared(page, limit);
 }

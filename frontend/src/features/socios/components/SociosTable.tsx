@@ -1,4 +1,4 @@
-import { Pencil, RotateCcw, ShieldOff, Trash2, UsersRound } from 'lucide-react';
+import { CarFront, Pencil, RotateCcw, ShieldOff, Trash2, UsersRound } from 'lucide-react';
 import { EmptyState } from '@components/EmptyState';
 import { Table } from '@components/Table';
 import type { Column } from '@components/Table';
@@ -8,12 +8,13 @@ import { SocioStatusBadge } from './SocioStatusBadge';
 type SociosTableProps = {
   socios: Socio[];
   canManage: boolean;
+  onViewUnidades: (socio: Socio) => void;
   onEdit: (socio: Socio) => void;
   onToggleEstado: (socio: Socio) => void;
   onRetire: (socio: Socio) => void;
 };
 
-export function SociosTable({ socios, canManage, onEdit, onToggleEstado, onRetire }: SociosTableProps) {
+export function SociosTable({ socios, canManage, onViewUnidades, onEdit, onToggleEstado, onRetire }: SociosTableProps) {
   const columns: Column<Socio>[] = [
     {
       key: 'socio',
@@ -44,6 +45,16 @@ export function SociosTable({ socios, canManage, onEdit, onToggleEstado, onRetir
       className: 'cell-actions',
       render: (socio) => (
         <div className="row-actions">
+          <button
+            type="button"
+            className="icon-action"
+            title="Ver sus unidades"
+            aria-label={`Ver las unidades de ${socio.nombres} ${socio.apellidos}`}
+            onClick={() => onViewUnidades(socio)}
+          >
+            <CarFront size={15} />
+          </button>
+
           <button
             type="button"
             className="icon-action"
