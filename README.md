@@ -71,6 +71,20 @@ npm run dev               # http://localhost:3000
 
 Ver `backend/.env.example`. **Nunca** se versiona el archivo `.env` real.
 
+### Migraciones
+
+El esquema de PostgreSQL se gestiona con `sequelize-cli` (carpeta `backend/migrations`).
+`npm run dev` aplica las migraciones pendientes automáticamente antes de arrancar;
+también puedes hacerlo a mano:
+
+```bash
+npm run db:migrate        # aplica las pendientes
+npm run db:migrate:undo   # revierte la última
+npm run db:status         # estado de cada migración
+```
+
+Nunca se edita una migración ya aplicada: los cambios van en una migración nueva.
+
 ## Frontend — `frontend/`
 
 Panel administrativo en React 19 + Vite.
@@ -82,8 +96,8 @@ cp .env.example .env      # VITE_API_URL apuntando al backend
 npm run dev               # http://localhost:5173
 ```
 
-> El login del frontend todavía valida localmente (modo demo). La conexión con
-> `POST /api/auth/login` está pendiente.
+> El login ya consume `POST /api/auth/login`: guarda el token JWT y lo envía en
+> cada petición. Si el backend responde **401**, se cierra la sesión y se vuelve al login.
 
 ## Buenas prácticas del repositorio
 

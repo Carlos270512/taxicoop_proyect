@@ -24,8 +24,13 @@ COPY --from=build /app/package.json /app/package-lock.json ./
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 
+# Migraciones: el contenedor las aplica al arrancar
+COPY .sequelizerc ./
+COPY config ./config
+COPY migrations ./migrations
+
 USER node
 
 EXPOSE 3000
 
-CMD ["node", "dist/main.js"]
+CMD ["sh", "-c", "npx sequelize-cli db:migrate && exec node dist/main.js"]

@@ -28,8 +28,7 @@ async function bootstrap() {
     console.log('Base de datos PostgreSQL conectada correctamente.');
     
     registerModels();
-    await sequelize.sync({ alter: true });
-    console.log('Tablas sincronizadas en PostgreSQL.');
+    console.log('Modelos cargados. El esquema se gestiona con migraciones (npm run db:migrate).');
 
     // 2. Conectar a MongoDB con Mongoose
     await connectMongo();

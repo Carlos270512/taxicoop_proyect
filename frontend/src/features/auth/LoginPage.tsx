@@ -18,17 +18,15 @@ import {
   ShieldCheck,
   Sparkles,
   UserRound,
-  WifiOff,
 } from 'lucide-react';
 import { Navigate, useLocation, useNavigate } from 'react-router-dom';
-import { demoCredentials, useAuth } from './AuthContext';
+import { useAuth } from './AuthContext';
 import { PoleLogo } from './PoleLogo';
 import '../../styles/login.css';
 
 const perks = [
-  { icon: WifiOff, label: '100% sin conexión' },
-  { icon: ShieldCheck, label: 'Sesión local' },
-  { icon: Sparkles, label: 'Experiencia inmersiva' },
+  { icon: ShieldCheck, label: 'Acceso seguro con token' },
+  { icon: Sparkles, label: 'Panel conectado al backend' },
 ];
 
 const particles = Array.from({ length: 24 }, (_, index) => ({
@@ -109,17 +107,10 @@ export function LoginPage() {
     setCapsLock(event.getModifierState?.('CapsLock') ?? false);
   }
 
-  function fillDemo() {
-    setIdentifier(demoCredentials.identifier);
-    setPassword(demoCredentials.password);
-    setFeedback({ tone: 'info', text: 'Credenciales demo listas. Pulsa «Entrar al panel».' });
-    setStatus('idle');
-  }
-
   function recoverAccess() {
     setFeedback({
       tone: 'info',
-      text: 'Este ingreso funciona sin conexión. Usa admin / taxicoop para entrar.',
+      text: 'Contacta al administrador de la cooperativa para restablecer tu acceso.',
     });
   }
 
@@ -128,7 +119,7 @@ export function LoginPage() {
     if (isBusy) return;
 
     if (!identifier.trim() || !password) {
-      setFeedback({ tone: 'error', text: 'Escribe tu usuario y contraseña para continuar.' });
+      setFeedback({ tone: 'error', text: 'Escribe tu correo y contraseña para continuar.' });
       return;
     }
 
@@ -197,8 +188,8 @@ export function LoginPage() {
           </motion.h1>
 
           <motion.p className="login-lead" variants={itemVariants}>
-            Socios, conductores, vehículos y carreras en un solo panel. Ingreso local,
-            sin depender de la API.
+            Socios, conductores, vehículos y carreras en un solo panel.
+            Ingresa con las credenciales de tu cooperativa.
           </motion.p>
 
           <motion.div className="login-scene" variants={itemVariants} aria-hidden="true">
@@ -291,7 +282,7 @@ export function LoginPage() {
 
           <header className="login-card-head">
             <div className="login-live">
-              <i /> Acceso offline
+              <i /> Acceso seguro
             </div>
             <h2 id="login-title">Bienvenido de nuevo</h2>
             <p>
@@ -301,15 +292,15 @@ export function LoginPage() {
 
           <form className="login-form" onSubmit={handleSubmit} noValidate>
             <motion.div className="login-field" variants={fieldVariants}>
-              <label htmlFor="login-user">Usuario o correo</label>
+              <label htmlFor="login-user">Correo electrónico</label>
               <div className="login-input">
                 <UserRound size={17} aria-hidden="true" />
                 <input
                   id="login-user"
                   name="identifier"
-                  type="text"
+                  type="email"
                   autoComplete="username"
-                  placeholder="admin"
+                  placeholder="correo@poletaxicoop.com"
                   value={identifier}
                   onChange={(event) => setIdentifier(event.target.value)}
                   disabled={isBusy}
@@ -422,15 +413,6 @@ export function LoginPage() {
             </motion.button>
           </form>
 
-          <div className="login-demo">
-            <span>
-              <i /> Acceso demo
-            </span>
-            <button type="button" onClick={fillDemo}>
-              usar <strong>admin / taxicoop</strong>
-            </button>
-          </div>
-
           <AnimatePresence>
             {status === 'success' && (
               <motion.div
@@ -463,7 +445,7 @@ export function LoginPage() {
         </motion.section>
       </main>
 
-      <p className="login-footnote">Pole Taxicoop · Panel de gestión · Modo demostración sin API</p>
+      <p className="login-footnote">Pole Taxicoop · Panel de gestión</p>
     </div>
   );
 }
