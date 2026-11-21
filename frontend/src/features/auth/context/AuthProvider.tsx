@@ -12,6 +12,7 @@ function toAuthUser(user: SessionUser): AuthUser {
     name: local.charAt(0).toUpperCase() + local.slice(1),
     email: user.email,
     role: user.roles.length > 0 ? user.roles.join(' · ') : 'Sin rol asignado',
+    roles: user.roles,
     initials: local.slice(0, 2).toUpperCase(),
   };
 }
