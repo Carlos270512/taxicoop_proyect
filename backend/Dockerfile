@@ -28,6 +28,7 @@ COPY --from=build /app/dist ./dist
 COPY .sequelizerc ./
 COPY config ./config
 COPY migrations ./migrations
+COPY scripts ./scripts
 
 USER node
 

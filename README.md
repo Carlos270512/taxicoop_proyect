@@ -66,6 +66,7 @@ npm run dev               # http://localhost:3000
 | GET | `/api/votacion/elections/active` | JWT |
 | POST | `/api/votacion/vote` | JWT |
 | GET | `/api/votacion/elections/:id/results` | JWT |
+| GET | `/api/dashboard/summary` | JWT |
 
 ### Variables de entorno
 
@@ -84,6 +85,15 @@ npm run db:status         # estado de cada migración
 ```
 
 Nunca se edita una migración ya aplicada: los cambios van en una migración nueva.
+
+### Datos de demostración
+
+```bash
+npm run db:seed                                   # local
+docker compose exec backend node scripts/seed-demo.js   # en Docker
+```
+
+Crea 2 socios, 2 unidades, 1 votación activa y 1 alerta de emergencia. Es idempotente.
 
 ## Frontend — `frontend/`
 

@@ -8,6 +8,7 @@ import socioRoutes from './lib/Socio/infrastructure/socio.routes';
 import unidadRoutes from './lib/Unidad/infrastructure/unidad.routes';
 import emergencyRoutes from './lib/Emergencia/infrastructure/emergency.routes';
 import authRoutes from './lib/Identity/infrastructure/auth.routes';
+import dashboardRoutes from './lib/Dashboard/infrastructure/dashboard.routes';
 import votacionRouter from './lib/Votacion/infrastructure/votacion.routes';
 
 dotenv.config();
@@ -46,6 +47,7 @@ async function bootstrap() {
     app.use('/api/unidades', unidadRoutes);
     app.use('/api/emergencias', emergencyRoutes);
     app.use('/api/auth', authRoutes);
+    app.use('/api/dashboard', dashboardRoutes);
    
 
     // Levantar servidor
