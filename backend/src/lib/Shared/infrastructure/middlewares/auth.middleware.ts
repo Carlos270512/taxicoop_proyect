@@ -9,6 +9,21 @@ export interface AuthenticatedRequest extends Request {
   };
 }
 
+export const authorizeRoles = (...allowedRoles: string[]) => {
+  return (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
+    if (!req.user) {
+      return res.status(401).json({ success: false, error: 'Acceso no autorizado.' });
+    }
+
+    const hasRole = req.user.roles.some((role) => allowedRoles.includes(role));
+    if (!hasRole) {
+      return res.status(403).json({ success: false, error: 'No tienes permisos para realizar esta acción.' });
+    }
+
+    next();
+  };
+};
+
 export const authenticateJWT = (req: AuthenticatedRequest, res: Response, next: NextFunction) => {
   const authHeader = req.headers.authorization;
 

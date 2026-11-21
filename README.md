@@ -59,7 +59,12 @@ npm run dev               # http://localhost:3000
 | POST | `/api/auth/register` | pública |
 | POST | `/api/auth/login` | pública |
 | POST / GET | `/api/auth/roles` | pública |
-| POST / GET | `/api/socios` | pública |
+| GET | `/api/socios?q=&estado=&page=&limit=` | JWT |
+| GET | `/api/socios/:id` | JWT |
+| POST | `/api/socios` | JWT · ADMIN |
+| PUT | `/api/socios/:id` | JWT · ADMIN |
+| PATCH | `/api/socios/:id/estado` | JWT · ADMIN |
+| DELETE | `/api/socios/:id` | JWT · ADMIN (baja lógica → RETIRADO) |
 | POST / GET | `/api/unidades` | pública |
 | POST / GET | `/api/emergencias` | pública |
 | POST | `/api/votacion/elections` | JWT |
