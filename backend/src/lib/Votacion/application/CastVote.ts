@@ -1,46 +1,52 @@
+import crypto from 'crypto';
 import { VotacionRepository } from '../domain/VotacionRepository';
 import { Vote } from '../domain/Vote';
-import crypto from 'crypto';
+import { HttpError } from '../../Shared/domain/HttpError';
 
-interface CastVoteDTO {
+export type CastVoteDTO = {
   electionId: string;
   optionId: string;
   userId: string;
-}
+};
 
 export class CastVoteUseCase {
   constructor(private readonly votacionRepository: VotacionRepository) {}
 
   async run(dto: CastVoteDTO): Promise<Vote> {
-    // 1. Verificar si la elección existe y está activa
-    const election = await this.votacionRepository.findElectionById(dto.electionId);
+    const electionId = String(dto.electionId ?? '').trim();
+    const optionId = String(dto.optionId ?? '').trim();
+    const userId = String(dto.userId ?? '').trim();
+
+    if (!electionId || !optionId || !userId) {
+      throw new HttpError(400, 'La elección y la opción son obligatorias.');
+    }
+
+    const election = await this.votacionRepository.findElectionById(electionId);
     if (!election) {
-      throw new Error('La elección especificada no existe.');
+      throw new HttpError(404, 'La elección especificada no existe.');
     }
 
     if (election.status !== 'ACTIVE') {
-      throw new Error('La elección no se encuentra activa para emitir votos.');
+      throw new HttpError(409, 'La elección no está activa para votar.');
     }
 
-    // 2. Verificar si el usuario ya votó en esta elección 
-    const alreadyVoted = await this.votacionRepository.hasUserVoted(dto.electionId, dto.userId);
-    if (alreadyVoted) {
-      throw new Error('Acción denegada: Ya has registrado tu voto en esta elección.');
+    const now = new Date();
+    if (now < election.startDate) {
+      throw new HttpError(409, 'La votación aún no ha comenzado.');
+    }
+    if (now > election.endDate) {
+      throw new HttpError(409, 'La votación ya finalizó.');
     }
 
-    // 3. Validar que la opción pertenezca a la elección
-    const optionExists = election.options.some((opt) => opt.id === dto.optionId);
-    if (!optionExists) {
-      throw new Error('La opción de voto seleccionada no es válida para esta elección.');
+    if (await this.votacionRepository.hasUserVoted(electionId, userId)) {
+      throw new HttpError(409, 'Ya has registrado tu voto en esta elección.');
     }
 
-    // 4. Registrar el voto
-    const vote = new Vote(
-      crypto.randomUUID(),
-      dto.electionId,
-      dto.optionId,
-      dto.userId
-    );
+    if (!election.options.some((option) => option.id === optionId)) {
+      throw new HttpError(400, 'La opción de voto seleccionada no es válida para esta elección.');
+    }
+
+    const vote = new Vote(crypto.randomUUID(), electionId, optionId, userId);
 
     return await this.votacionRepository.saveVote(vote);
   }

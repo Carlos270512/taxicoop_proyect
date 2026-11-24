@@ -2,10 +2,10 @@ import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../../Shared/infrastructure/database/sequelize.config';
 
 export class VoteModel extends Model {
-  public id!: string;
-  public electionId!: string;
-  public optionId!: string;
-  public userId!: string;
+  declare id: string;
+  declare electionId: string;
+  declare optionId: string;
+  declare userId: string;
 }
 
 VoteModel.init(

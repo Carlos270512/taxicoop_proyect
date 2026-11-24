@@ -1,13 +1,15 @@
 import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../../Shared/infrastructure/database/sequelize.config';
+import { OptionModel } from './Option.model';
 
 export class ElectionModel extends Model {
-  public id!: string;
-  public title!: string;
-  public description!: string;
-  public startDate!: Date;
-  public endDate!: Date;
-  public status!: 'DRAFT' | 'ACTIVE' | 'CLOSED';
+  declare id: string;
+  declare title: string;
+  declare description: string;
+  declare startDate: Date;
+  declare endDate: Date;
+  declare status: 'DRAFT' | 'ACTIVE' | 'CLOSED';
+  declare options?: OptionModel[];
 }
 
 ElectionModel.init(

@@ -2,10 +2,10 @@ import { DataTypes, Model } from 'sequelize';
 import { sequelize } from '../../../Shared/infrastructure/database/sequelize.config';
 
 export class OptionModel extends Model {
-  public id!: string;
-  public electionId!: string;
-  public title!: string;
-  public description!: string;
+  declare id: string;
+  declare electionId: string;
+  declare title: string;
+  declare description: string;
 }
 
 OptionModel.init(
