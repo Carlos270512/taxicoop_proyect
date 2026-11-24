@@ -65,12 +65,20 @@ npm run dev               # http://localhost:3000
 | PUT | `/api/socios/:id` | JWT · ADMIN |
 | PATCH | `/api/socios/:id/estado` | JWT · ADMIN |
 | DELETE | `/api/socios/:id` | JWT · ADMIN (baja lógica → RETIRADO) |
-| POST / GET | `/api/unidades` | pública |
+| GET | `/api/unidades?socioId=&estado=&q=&page=&limit=` | JWT |
+| GET | `/api/unidades/:id` | JWT |
+| POST | `/api/unidades` | JWT · ADMIN |
+| PUT | `/api/unidades/:id` | JWT · ADMIN |
+| PATCH | `/api/unidades/:id/estado` | JWT · ADMIN |
+| DELETE | `/api/unidades/:id` | JWT · ADMIN (baja lógica → SUSPENDIDA) |
 | POST / GET | `/api/emergencias` | pública |
-| POST | `/api/votacion/elections` | JWT |
+| GET | `/api/votacion/elections?status=&page=&limit=` | JWT |
 | GET | `/api/votacion/elections/active` | JWT |
-| POST | `/api/votacion/vote` | JWT |
-| GET | `/api/votacion/elections/:id/results` | JWT |
+| GET | `/api/votacion/elections/:id` | JWT |
+| GET | `/api/votacion/elections/:id/results` | JWT (resultados ocultos hasta el cierre, salvo ADMIN) |
+| POST | `/api/votacion/elections` | JWT · ADMIN |
+| PATCH | `/api/votacion/elections/:id/status` | JWT · ADMIN (DRAFT → ACTIVE → CLOSED) |
+| POST | `/api/votacion/vote` | JWT (un voto por socio y elección) |
 | GET | `/api/dashboard/summary` | JWT |
 
 ### Variables de entorno
@@ -113,6 +121,9 @@ npm run dev               # http://localhost:5173
 
 > El login ya consume `POST /api/auth/login`: guarda el token JWT y lo envía en
 > cada petición. Si el backend responde **401**, se cierra la sesión y se vuelve al login.
+
+Módulos del panel ya conectados al backend: **Dashboard**, **Socios**, **Vehículos (Unidades)**
+y **Votaciones** (`/votaciones` y `/votaciones/:id` con voto y resultados).
 
 ## Buenas prácticas del repositorio
 

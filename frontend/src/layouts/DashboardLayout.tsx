@@ -3,7 +3,7 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   BadgeDollarSign, LayoutDashboard, CarFront, UsersRound, UserRound,
-  Route, ChartNoAxesCombined, Settings, Bell, Search, ChevronDown, LogOut, ShieldCheck,
+  Route, ChartNoAxesCombined, Settings, Bell, Search, ChevronDown, LogOut, ShieldCheck, Vote,
 } from 'lucide-react';
 import { useAuth } from '@features/auth';
 
@@ -15,6 +15,7 @@ const navigation = [
   { label: 'Carreras', path: '/carreras', icon: Route },
   { label: 'Pagos', path: '/pagos', icon: BadgeDollarSign },
   { label: 'Reportes', path: '/reportes', icon: ChartNoAxesCombined },
+  { label: 'Votaciones', path: '/votaciones', icon: Vote },
 ];
 
 export function DashboardLayout() {
