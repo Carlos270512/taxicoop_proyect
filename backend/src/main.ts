@@ -10,6 +10,7 @@ import emergencyRoutes from './lib/Emergencia/infrastructure/emergency.routes';
 import authRoutes from './lib/Identity/infrastructure/auth.routes';
 import dashboardRoutes from './lib/Dashboard/infrastructure/dashboard.routes';
 import votacionRouter from './lib/Votacion/infrastructure/votacion.routes';
+import assistantRoutes from './lib/Assistant/infrastructure/assistant.routes';
 
 dotenv.config();
 
@@ -48,6 +49,7 @@ async function bootstrap() {
     app.use('/api/emergencias', emergencyRoutes);
     app.use('/api/auth', authRoutes);
     app.use('/api/dashboard', dashboardRoutes);
+    app.use('/api/assistant', assistantRoutes);
    
 
     // Levantar servidor

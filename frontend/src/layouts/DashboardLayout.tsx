@@ -6,6 +6,7 @@ import {
   Settings, Bell, Search, ChevronDown, LogOut, ShieldCheck, Vote,
 } from 'lucide-react';
 import { useAuth } from '@features/auth';
+import { AssistantWidget } from '@features/assistant';
 
 const navigation = [
   { label: 'Panel principal', path: '/', icon: LayoutDashboard, roles: ['ADMIN', 'SOCIO'] },
@@ -126,6 +127,7 @@ export function DashboardLayout() {
         </section>
       </main>
       {menuOpen && <button type="button" className="user-menu-backdrop" aria-label="Cerrar menú" onClick={() => setMenuOpen(false)} />}
+      <AssistantWidget />
     </div>
   );
 }

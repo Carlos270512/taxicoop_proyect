@@ -81,6 +81,8 @@ npm run dev               # http://localhost:3000
 | PATCH | `/api/votacion/elections/:id/status` | JWT · ADMIN (DRAFT → ACTIVE → CLOSED) |
 | POST | `/api/votacion/vote` | JWT (un voto por socio y elección) |
 | GET | `/api/dashboard/summary` | JWT |
+| GET | `/api/assistant/status` | JWT (si el asistente está configurado) |
+| POST | `/api/assistant/chat` | JWT (límite 20 preguntas / 5 min por usuario) |
 
 ### Variables de entorno
 
@@ -137,6 +139,35 @@ y **Votaciones** (`/votaciones` y `/votaciones/:id` con voto y resultados).
 - Las rutas de administración (`/socios`, `/vehiculos`, `/unidades` y los módulos pendientes)
   están protegidas en el front con `RequireRole`; el backend vuelve a validar el rol.
 - Módulos aún no terminados y ocultos en el menú: Conductores, Carreras, Pagos y Reportes.
+
+## Asistente IA (DeepSeek)
+
+Chat flotante (abajo a la derecha) disponible en todas las pantallas internas. Responde
+preguntas sobre el sistema usando datos reales según el rol de la sesión.
+
+```
+frontend → POST /api/assistant/chat (JWT) → backend → api.deepseek.com
+```
+
+**La API key nunca llega al navegador.** Se configura solo en el backend:
+
+```bash
+# backend/.env  (NO se versiona)
+DEEPSEEK_API_KEY=sk-...
+DEEPSEEK_MODEL=deepseek-chat
+DEEPSEEK_BASE_URL=https://api.deepseek.com
+```
+
+En Docker las toma del `.env` de la raíz (mismas variables) y se pasan al servicio `backend`.
+
+Detalles de seguridad y costo:
+
+- El historial se recorta a los últimos 12 mensajes y se limita a 2000 caracteres por mensaje.
+- Respuestas acotadas (`max_tokens` 700) y *timeout* de 25 s.
+- Límite de 20 preguntas cada 5 minutos por usuario (en memoria).
+- Sin key configurada el endpoint responde `503` con un mensaje claro en el chat.
+- El asistente **solo informa** (no crea, edita ni borra registros) y el contexto de cada rol
+  se arma en el backend: el socio solo recibe sus propios datos.
 
 ## Buenas prácticas del repositorio
 
