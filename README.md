@@ -60,6 +60,7 @@ npm run dev               # http://localhost:3000
 | POST | `/api/auth/login` | pública |
 | POST / GET | `/api/auth/roles` | pública |
 | GET | `/api/socios?q=&estado=&page=&limit=` | JWT |
+| GET | `/api/socios/me` | JWT (perfil del socio autenticado + sus unidades) |
 | GET | `/api/socios/:id` | JWT |
 | POST | `/api/socios` | JWT · ADMIN |
 | PUT | `/api/socios/:id` | JWT · ADMIN |
@@ -124,6 +125,18 @@ npm run dev               # http://localhost:5173
 
 Módulos del panel ya conectados al backend: **Dashboard**, **Socios**, **Vehículos (Unidades)**
 y **Votaciones** (`/votaciones` y `/votaciones/:id` con voto y resultados).
+
+### Roles y acceso
+
+| Rol | Panel de inicio | Menú |
+|---|---|---|
+| `ADMIN` | Resumen de la operación | Panel principal · Socios · Vehículos · Votaciones · Configuración |
+| `SOCIO` | Espacio personal (estado, unidades y votaciones abiertas) | Panel principal · Mi perfil · Votaciones |
+
+- `/perfil` consume `GET /api/socios/me` y muestra los datos del socio con sus unidades.
+- Las rutas de administración (`/socios`, `/vehiculos`, `/unidades` y los módulos pendientes)
+  están protegidas en el front con `RequireRole`; el backend vuelve a validar el rol.
+- Módulos aún no terminados y ocultos en el menú: Conductores, Carreras, Pagos y Reportes.
 
 ## Buenas prácticas del repositorio
 

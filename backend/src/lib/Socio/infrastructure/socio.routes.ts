@@ -7,8 +7,9 @@ import { GetSocioByIdUseCase } from '../application/GetSocioById';
 import { UpdateSocioUseCase } from '../application/UpdateSocio';
 import { ChangeSocioEstadoUseCase } from '../application/ChangeSocioEstado';
 import { RetireSocioUseCase } from '../application/RetireSocio';
+import { GetMySocioProfileUseCase } from '../application/GetMySocioProfile';
 import { HttpError } from '../../Shared/domain/HttpError';
-import { authenticateJWT, authorizeRoles } from '../../Shared/infrastructure/middlewares/auth.middleware';
+import { authenticateJWT, authorizeRoles, AuthenticatedRequest } from '../../Shared/infrastructure/middlewares/auth.middleware';
 
 const router = Router();
 
@@ -21,6 +22,7 @@ const getSocioByIdUseCase = new GetSocioByIdUseCase(socioRepository);
 const updateSocioUseCase = new UpdateSocioUseCase(socioRepository);
 const changeSocioEstadoUseCase = new ChangeSocioEstadoUseCase(socioRepository, unidadRepository);
 const retireSocioUseCase = new RetireSocioUseCase(socioRepository, unidadRepository);
+const getMySocioProfileUseCase = new GetMySocioProfileUseCase(socioRepository, unidadRepository);
 
 function fail(res: Response, error: unknown) {
   let status = 500;
@@ -43,6 +45,20 @@ function fail(res: Response, error: unknown) {
 
 // Todo el módulo requiere sesión válida
 router.use(authenticateJWT);
+
+// Perfil del socio autenticado (se declara antes de /:id)
+router.get('/me', async (req: AuthenticatedRequest, res) => {
+  try {
+    if (!req.user) {
+      throw new HttpError(401, 'Acceso no autorizado.');
+    }
+
+    const profile = await getMySocioProfileUseCase.run(req.user.id);
+    return res.status(200).json({ success: true, data: profile });
+  } catch (error) {
+    return fail(res, error);
+  }
+});
 
 router.get('/', async (req, res) => {
   try {

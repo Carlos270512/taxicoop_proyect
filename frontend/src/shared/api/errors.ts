@@ -15,3 +15,8 @@ export function getApiErrorMessage(error: unknown, fallback = 'Ocurrió un error
 
   return fallback;
 }
+
+/** Código HTTP de la respuesta, si el error viene de la API. */
+export function getApiErrorStatus(error: unknown): number | undefined {
+  return axios.isAxiosError(error) ? error.response?.status : undefined;
+}

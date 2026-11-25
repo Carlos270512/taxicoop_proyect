@@ -118,6 +118,17 @@ export class SequelizeSocioRepository implements SocioRepository {
     return toDomain(model.get({ plain: true }));
   }
 
+  async findByUserId(userId: string): Promise<Socio | null> {
+    const model = await SocioModel.findOne({
+      where: { userId },
+      attributes: { include: [[UNIDADES_COUNT, 'unidadesCount']] },
+      include: [{ model: UserAuthModel, as: 'userAuth', attributes: ['email'], required: false }],
+    });
+
+    if (!model) return null;
+    return toDomain(model.get({ plain: true }));
+  }
+
   async findByCedula(cedulaRuc: string): Promise<Socio | null> {
     const model = await SocioModel.findOne({ where: { cedulaRuc } });
     if (!model) return null;

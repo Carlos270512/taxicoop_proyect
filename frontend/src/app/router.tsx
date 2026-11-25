@@ -1,13 +1,17 @@
 import { createBrowserRouter, Navigate } from 'react-router-dom';
+import type { ReactNode } from 'react';
 import { DashboardLayout } from '@layouts/DashboardLayout';
-import { RequireAuth } from '@features/auth';
+import { RequireAuth, RequireRole } from '@features/auth';
 import { LoginPage } from '@features/auth/pages/LoginPage';
-import { DashboardPage } from '@features/dashboard/pages/DashboardPage';
 import { SociosPage } from '@features/socios/pages/SociosPage';
 import { UnidadesPage } from '@features/unidades/pages/UnidadesPage';
+import { MiPerfilPage } from '@features/perfil/pages/MiPerfilPage';
 import { VotacionesPage } from '@features/votacion/pages/VotacionesPage';
 import { VotacionDetallePage } from '@features/votacion/pages/VotacionDetallePage';
+import { HomePage } from './HomePage';
 import { ModulePage } from './ModulePage';
+
+const adminOnly = (element: ReactNode) => <RequireRole roles={['ADMIN']}>{element}</RequireRole>;
 
 export const router = createBrowserRouter([
   { path: '/login', element: <LoginPage /> },
@@ -18,13 +22,14 @@ export const router = createBrowserRouter([
         path: '/',
         element: <DashboardLayout />,
         children: [
-          { index: true, element: <DashboardPage /> },
-          { path: 'socios', element: <SociosPage /> },
-          { path: 'vehiculos', element: <UnidadesPage /> },
-          { path: 'unidades', element: <UnidadesPage /> },
+          { index: true, element: <HomePage /> },
+          { path: 'perfil', element: <MiPerfilPage /> },
+          { path: 'socios', element: adminOnly(<SociosPage />) },
+          { path: 'vehiculos', element: adminOnly(<UnidadesPage />) },
+          { path: 'unidades', element: adminOnly(<UnidadesPage />) },
           { path: 'votaciones', element: <VotacionesPage /> },
           { path: 'votaciones/:id', element: <VotacionDetallePage /> },
-          { path: ':module', element: <ModulePage /> },
+          { path: ':module', element: adminOnly(<ModulePage />) },
           { path: '*', element: <Navigate to="/" replace /> },
         ],
       },

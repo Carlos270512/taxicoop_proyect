@@ -1,4 +1,4 @@
-import { ArrowRight, ArrowUpRight, CalendarDays, CarFront, Plus, Route, ShieldAlert, UsersRound, Vote } from 'lucide-react';
+import { ArrowRight, ArrowUpRight, CalendarDays, CarFront, Plus, ShieldAlert, UsersRound, Vote } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { PageHeader } from '@components/PageHeader';
 import { StatCard } from '@components/StatCard';
@@ -69,7 +69,7 @@ export function DashboardPage() {
         </div>
       )}
       <div className="stats-grid">{stats.map((stat) => <StatCard key={stat.label} {...stat} />)}</div>
-      <div className="lower-grid"><section className="panel activity-panel"><div className="panel-heading"><div><h2>Actividad reciente</h2><p>Últimos movimientos registrados</p></div><button className="text-button">Ver todo <ArrowRight size={15} /></button></div><RecentActivity items={data?.recentActivity ?? []} isLoading={isLoading} /></section><section className="panel shortcuts-panel"><div className="panel-heading"><div><h2>Accesos rápidos</h2><p>Ir directamente a una sección</p></div></div><div className="shortcut-list"><Link to="/socios"><span className="shortcut-icon blue"><UsersRound size={17}/></span><span>Registrar socio</span><ArrowRight size={15}/></Link><Link to="/vehiculos"><span className="shortcut-icon green"><CarFront size={17}/></span><span>Agregar vehículo</span><ArrowRight size={15}/></Link><Link to="/carreras"><span className="shortcut-icon purple"><Route size={17}/></span><span>Ver carreras</span><ArrowRight size={15}/></Link></div></section></div>
+      <div className="lower-grid"><section className="panel activity-panel"><div className="panel-heading"><div><h2>Actividad reciente</h2><p>Últimos movimientos registrados</p></div><button className="text-button">Ver todo <ArrowRight size={15} /></button></div><RecentActivity items={data?.recentActivity ?? []} isLoading={isLoading} /></section><section className="panel shortcuts-panel"><div className="panel-heading"><div><h2>Accesos rápidos</h2><p>Ir directamente a una sección</p></div></div><div className="shortcut-list"><Link to="/socios"><span className="shortcut-icon blue"><UsersRound size={17}/></span><span>Registrar socio</span><ArrowRight size={15}/></Link><Link to="/vehiculos"><span className="shortcut-icon green"><CarFront size={17}/></span><span>Agregar vehículo</span><ArrowRight size={15}/></Link><Link to="/votaciones"><span className="shortcut-icon purple"><Vote size={17}/></span><span>Ver votaciones</span><ArrowRight size={15}/></Link></div></section></div>
     </>
   );
 }

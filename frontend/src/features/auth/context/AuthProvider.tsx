@@ -8,8 +8,9 @@ import type { AuthUser } from '../model/types';
 
 function toAuthUser(user: SessionUser): AuthUser {
   const local = user.email.split('@')[0] || user.email;
+  const words = local.split(/[._-]+/).filter(Boolean).map((word) => word.charAt(0).toUpperCase() + word.slice(1));
   return {
-    name: local.charAt(0).toUpperCase() + local.slice(1),
+    name: words.join(' ') || local,
     email: user.email,
     role: user.roles.length > 0 ? user.roles.join(' · ') : 'Sin rol asignado',
     roles: user.roles,
@@ -86,4 +87,15 @@ export function RequireAuth() {
   }
 
   return <Outlet />;
+}
+
+export function RequireRole({ roles, children }: { roles: string[]; children: ReactNode }) {
+  const { user } = useAuth();
+  const allowed = user?.roles.some((role) => roles.includes(role)) ?? false;
+
+  if (!allowed) {
+    return <Navigate to="/" replace />;
+  }
+
+  return <>{children}</>;
 }

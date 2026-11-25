@@ -2,21 +2,23 @@ import { useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-  BadgeDollarSign, LayoutDashboard, CarFront, UsersRound, UserRound,
-  Route, ChartNoAxesCombined, Settings, Bell, Search, ChevronDown, LogOut, ShieldCheck, Vote,
+  LayoutDashboard, CarFront, UsersRound, UserRound,
+  Settings, Bell, Search, ChevronDown, LogOut, ShieldCheck, Vote,
 } from 'lucide-react';
 import { useAuth } from '@features/auth';
 
 const navigation = [
-  { label: 'Panel principal', path: '/', icon: LayoutDashboard },
-  { label: 'Socios', path: '/socios', icon: UsersRound },
-  { label: 'Conductores', path: '/conductores', icon: UserRound },
-  { label: 'Vehículos', path: '/vehiculos', icon: CarFront },
-  { label: 'Carreras', path: '/carreras', icon: Route },
-  { label: 'Pagos', path: '/pagos', icon: BadgeDollarSign },
-  { label: 'Reportes', path: '/reportes', icon: ChartNoAxesCombined },
-  { label: 'Votaciones', path: '/votaciones', icon: Vote },
+  { label: 'Panel principal', path: '/', icon: LayoutDashboard, roles: ['ADMIN', 'SOCIO'] },
+  { label: 'Socios', path: '/socios', icon: UsersRound, roles: ['ADMIN'] },
+  { label: 'Vehículos', path: '/vehiculos', icon: CarFront, roles: ['ADMIN'] },
+  { label: 'Mi perfil', path: '/perfil', icon: UserRound, roles: ['SOCIO'] },
+  { label: 'Votaciones', path: '/votaciones', icon: Vote, roles: ['ADMIN', 'SOCIO'] },
 ];
+
+const ROLE_LABELS: Record<string, string> = {
+  ADMIN: 'Administrador',
+  SOCIO: 'Socio',
+};
 
 export function DashboardLayout() {
   const { user, signOut } = useAuth();
@@ -24,8 +26,12 @@ export function DashboardLayout() {
   const location = useLocation();
   const [menuOpen, setMenuOpen] = useState(false);
 
+  const roles = user?.roles ?? [];
+  const isAdmin = roles.includes('ADMIN');
+  const visibleNavigation = navigation.filter((item) => item.roles.some((role) => roles.includes(role)));
+
   const name = user?.name ?? 'Administrador';
-  const role = user?.role ?? 'Gestión general';
+  const role = roles.length > 0 ? roles.map((value) => ROLE_LABELS[value] ?? value).join(' · ') : 'Gestión general';
   const initials = user?.initials ?? 'AD';
 
   function handleSignOut() {
@@ -43,14 +49,16 @@ export function DashboardLayout() {
         </div>
         <div className="side-caption">MENÚ PRINCIPAL</div>
         <nav className="navigation">
-          {navigation.map(({ label, path, icon: Icon }) => (
+          {visibleNavigation.map(({ label, path, icon: Icon }) => (
             <NavLink key={path} to={path} end={path === '/'} className={({ isActive }) => `nav-link${isActive ? ' active' : ''}`}>
               <Icon size={19} strokeWidth={1.8} /><span>{label}</span>
             </NavLink>
           ))}
         </nav>
         <div className="sidebar-bottom">
-          <NavLink to="/configuracion" className="nav-link"><Settings size={19} /><span>Configuración</span></NavLink>
+          {isAdmin ? (
+            <NavLink to="/configuracion" className="nav-link"><Settings size={19} /><span>Configuración</span></NavLink>
+          ) : null}
           <div className="help-card"><div className="help-icon">?</div><div><strong>¿Necesitas ayuda?</strong><span>Contacta al administrador</span></div></div>
           <div className="sidebar-user">
             <div className="avatar avatar-blue">{initials}</div>

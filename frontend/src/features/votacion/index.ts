@@ -7,6 +7,7 @@ export { ResultsChart } from './components/ResultsChart';
 export { useElections, useElection, useActiveElections, useVotacionMutations, votacionKeys } from './hooks/useVotaciones';
 export { votacionApi } from './api/votacion.api';
 export { EMPTY_ELECTION_FILTERS, ELECTION_STATUSES } from './model/types';
+export { formatPeriod } from './model/format';
 export type {
   CreateElectionInput,
   Election,

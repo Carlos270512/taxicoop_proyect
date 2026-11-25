@@ -118,3 +118,36 @@
 .option-editor{display:grid;gap:8px;margin-bottom:8px}
 .option-editor-row{display:flex;gap:6px}
 .option-editor-row .field-input{flex:1}
+/* ===== Perfil del socio ===== */
+.profile-hero{display:flex;gap:16px;align-items:center;padding:18px;margin-bottom:14px}
+.avatar.profile-avatar{width:56px;height:56px;border-radius:16px;font-size:18px;flex:0 0 auto}
+.profile-copy{min-width:0}
+.profile-copy h2{margin:0;font-size:16px;color:#26394c}
+.profile-name{display:flex;align-items:center;gap:10px;flex-wrap:wrap}
+.profile-tags{display:flex;flex-wrap:wrap;gap:14px;margin-top:10px}
+.profile-tags span{display:inline-flex;align-items:center;gap:6px;font-size:11px;color:#5f7080}
+.profile-grid{display:grid;grid-template-columns:1.6fr 1fr;gap:14px}
+.profile-grid .panel{padding:16px}
+.info-list{list-style:none;margin:12px 0 0;padding:0;display:grid;gap:10px}
+.info-list li{display:flex;justify-content:space-between;gap:12px;font-size:11px;color:#7f8e9d;padding-bottom:9px;border-bottom:1px solid #f0f3f6}
+.info-list li:last-child{border:0;padding-bottom:0}
+.info-list strong{color:#26394c;font-weight:600;text-align:right;word-break:break-word}
+.panel-link{display:inline-flex;align-items:center;gap:7px;margin-top:14px;font-size:11px;font-weight:600;color:#2479c7;text-decoration:none}
+.panel-link:hover{color:#1b5f9e}
+
+/* ===== Panel del socio ===== */
+.socio-banner{display:flex;justify-content:space-between;align-items:center;gap:16px;flex-wrap:wrap;background:linear-gradient(120deg,#1b4f7d,#2479c7);color:#fff;border-radius:14px;padding:18px 20px;margin-bottom:16px}
+.socio-banner h2{margin:0 0 4px;font-size:16px;color:#fff}
+.socio-banner p{margin:0;font-size:11px;opacity:.85}
+.banner-badge{display:inline-flex;align-items:center;gap:6px;background:rgba(255,255,255,.16);border:1px solid rgba(255,255,255,.32);padding:7px 13px;border-radius:999px;font-size:11px;font-weight:600;text-transform:capitalize}
+.socio-grid{display:grid;grid-template-columns:1.3fr 1fr;gap:14px;margin-top:14px}
+.socio-grid .panel{padding:16px}
+.socio-list{display:grid;gap:9px;margin-top:10px}
+.socio-list-row{display:flex;align-items:center;justify-content:space-between;gap:12px;border:1px solid #eef2f6;border-radius:10px;padding:10px 12px;text-decoration:none;color:inherit;transition:.15s;background:#fff}
+.socio-list-row:hover{border-color:#cfe0ef;background:#fafcfe}
+.socio-list-row.static:hover{border-color:#eef2f6;background:#fff}
+.socio-list-main{min-width:0}
+.socio-list-main strong{display:block;font-size:12px;color:#26394c}
+.socio-list-main span{display:block;font-size:11px;color:#8b9aa8;margin-top:2px}
+.count-pill{display:inline-flex;align-items:center;justify-content:center;min-width:26px;height:22px;padding:0 8px;border-radius:999px;background:#f2f7fc;color:#2479c7;font-size:11px;font-weight:700}
+@media (max-width:1080px){.profile-grid,.socio-grid{grid-template-columns:1fr}}
