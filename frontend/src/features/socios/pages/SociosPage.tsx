@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { Plus, ShieldAlert, UsersRound } from 'lucide-react';
+import { Link2, Plus, ShieldAlert, UsersRound } from 'lucide-react';
 import { useNavigate } from 'react-router-dom';
 import { Button } from '@components/Button';
 import { EmptyState } from '@components/EmptyState';
@@ -7,6 +7,7 @@ import { Modal } from '@components/Modal';
 import { PageHeader } from '@components/PageHeader';
 import { useAuth } from '@features/auth';
 import { UbicacionModal } from '@features/ubicacion';
+import { SolicitudesPanel, SolicitudLinkModal } from '@features/solicitudes';
 import { getApiErrorMessage } from '@shared/api/errors';
 import { useDebounce } from '@shared/hooks/useDebounce';
 import { EMPTY_SOCIO_FILTERS } from '../model/types';
@@ -32,6 +33,8 @@ export function SociosPage() {
   const [toRetire, setToRetire] = useState<Socio | null>(null);
   const [ubicacionDe, setUbicacionDe] = useState<Socio | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
+  const [tab, setTab] = useState<'socios' | 'postulaciones'>('socios');
+  const [linkOpen, setLinkOpen] = useState(false);
 
   const socios = data?.data ?? [];
   const meta = data?.meta;
@@ -102,14 +105,46 @@ export function SociosPage() {
         subtitle="Administra los socios de la cooperativa y sus accesos al sistema."
         action={
           canManage ? (
-            <button className="primary-button" onClick={() => { setFormError(null); setModal({ mode: 'create' }); }}>
-              <Plus size={17} /> Nuevo socio
-            </button>
+            <div className="header-actions">
+              <Button variant="ghost" onClick={() => setLinkOpen(true)}>
+                <Link2 size={16} /> Enlace de postulación
+              </Button>
+              <button className="primary-button" onClick={() => { setFormError(null); setModal({ mode: 'create' }); }}>
+                <Plus size={17} /> Nuevo socio
+              </button>
+            </div>
           ) : undefined
         }
       />
 
       <div className="panel table-panel">
+        {canManage ? (
+          <div className="tabs" role="tablist" aria-label="Socios y postulaciones">
+            <button
+              type="button"
+              role="tab"
+              aria-selected={tab === 'socios'}
+              className={`tab${tab === 'socios' ? ' active' : ''}`}
+              onClick={() => setTab('socios')}
+            >
+              Socios
+            </button>
+            <button
+              type="button"
+              role="tab"
+              aria-selected={tab === 'postulaciones'}
+              className={`tab${tab === 'postulaciones' ? ' active' : ''}`}
+              onClick={() => setTab('postulaciones')}
+            >
+              Postulaciones
+            </button>
+          </div>
+        ) : null}
+
+        {tab === 'postulaciones' && canManage ? (
+          <SolicitudesPanel />
+        ) : (
+          <>
         <SociosFilters filters={filters} total={meta?.total ?? 0} onChange={updateFilters} />
 
         {!canManage ? (
@@ -165,7 +200,11 @@ export function SociosPage() {
             </Button>
           </div>
         ) : null}
+          </>
+        )}
       </div>
+
+      <SolicitudLinkModal open={linkOpen} onClose={() => setLinkOpen(false)} />
 
       <SocioFormModal
         open={Boolean(modal)}

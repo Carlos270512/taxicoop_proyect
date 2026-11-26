@@ -9,6 +9,8 @@ export class UnidadModel extends Model {
   declare anioVehiculo: number;
   declare socioId: string;
   declare estado: 'OPERATIVA' | 'EN_TRAMITE' | 'SUSPENDIDA';
+  declare fechaExpiracion: Date | null;
+  declare matriculaArchivoId: string | null;
 }
 
 UnidadModel.init(
@@ -46,6 +48,14 @@ UnidadModel.init(
       type: DataTypes.ENUM('OPERATIVA', 'EN_TRAMITE', 'SUSPENDIDA'),
       allowNull: false,
       defaultValue: 'OPERATIVA',
+    },
+    fechaExpiracion: {
+      type: DataTypes.DATE,
+      allowNull: true,
+    },
+    matriculaArchivoId: {
+      type: DataTypes.UUID,
+      allowNull: true,
     },
   },
   {

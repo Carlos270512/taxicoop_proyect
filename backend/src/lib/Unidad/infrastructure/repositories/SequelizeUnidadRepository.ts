@@ -23,12 +23,17 @@ function toDomain(row: any): Unidad {
     row.estado,
     socio ? `${socio.nombres} ${socio.apellidos}` : undefined,
     socio ? socio.estado : undefined,
-    row.createdAt
+    row.createdAt,
+    row.fechaExpiracion ?? null,
+    row.matriculaArchivoId ?? null
   );
 }
 
 export class SequelizeUnidadRepository implements UnidadRepository {
-  async save(unidad: Unidad): Promise<Unidad> {
+  async save(
+    unidad: Unidad,
+    extras?: { fechaExpiracion?: Date | null; matriculaArchivoId?: string | null }
+  ): Promise<Unidad> {
     await UnidadModel.create({
       id: unidad.id,
       numeroUnidad: unidad.numeroUnidad,
@@ -36,6 +41,8 @@ export class SequelizeUnidadRepository implements UnidadRepository {
       anioVehiculo: unidad.anioVehiculo,
       socioId: unidad.socioId,
       estado: unidad.estado,
+      fechaExpiracion: extras?.fechaExpiracion ?? null,
+      matriculaArchivoId: extras?.matriculaArchivoId ?? null,
     });
     return unidad;
   }

@@ -64,6 +64,15 @@ npm run dev               # http://localhost:3000
 | POST | `/api/ubicaciones/me` | JWT (el socio comparte su ubicación) |
 | GET | `/api/ubicaciones/me` | JWT (última ubicación propia) |
 | GET | `/api/ubicaciones/:socioId` | JWT · ADMIN (última ubicación + historial) |
+| GET | `/api/solicitudes/cedula/:documento` | JWT (autocompletar nombres) |
+| GET | `/api/solicitudes?estado=&page=&limit=` | JWT · ADMIN |
+| POST | `/api/solicitudes` | JWT · ADMIN (genera enlace) |
+| PATCH | `/api/solicitudes/:id/aprobar` | JWT · ADMIN |
+| PATCH | `/api/solicitudes/:id/rechazar` | JWT · ADMIN |
+| GET | `/api/solicitudes/archivos/:id` | JWT · ADMIN (descarga cifrada) |
+| GET | `/api/solicitudes/publicas/:token` | pública |
+| POST | `/api/solicitudes/publicas/:token` | pública (envío del formulario) |
+| POST | `/api/solicitudes/publicas/:token/archivos` | pública (multipart) |
 | GET | `/api/socios/:id` | JWT |
 | POST | `/api/socios` | JWT · ADMIN |
 | PUT | `/api/socios/:id` | JWT · ADMIN |
@@ -161,6 +170,39 @@ Botón rojo flotante (junto al asistente) disponible para todos los roles. Abre 
 teléfonos de auxilio como enlaces `tel:` (desde el celular marcan directo): ECU 911, Policía
 Nacional 101, Bomberos 102 y Cruz Roja 131. Si defines `VITE_COOP_EMERGENCY_PHONE` en el
 `frontend/.env` aparece además la central de la cooperativa.
+
+## Postulación de socios
+
+El alta de un socio puede hacerse de dos formas:
+
+1. **Directa** (`Nuevo socio`): formulario corto con autocompletado de nombres y apellidos al
+   escribir la cédula.
+2. **Por postulación** (`Enlace de postulación`): se genera un enlace único para que el aspirante
+   llene sus datos desde fuera del sistema; el administrador luego **aprueba** o **rechaza**.
+
+Flujo de la postulación:
+
+| Paso | Quién | Qué ocurre |
+|---|---|---|
+| 1 | ADMIN | Genera el enlace (opcionalmente indica el socio saliente del puesto) |
+| 2 | Postulante | Abre `/postulacion/<token>`: cédula (autocompleta nombres), datos, contraseña, 3 documentos y vehículo |
+| 3 | ADMIN | En **Socios → Postulaciones** revisa, descarga documentos y aprueba o rechaza con motivo |
+| 4 | Sistema | Al aprobar crea usuario (bcrypt), socio y unidad con su fecha de vencimiento |
+
+**Documentos (cifrados en disco con AES-256-GCM):**
+
+- Licencia de conducir (PDF/JPG/PNG, máximo 8 MB)
+- Contrato de venta del puesto notariado
+- Matrícula del vehículo
+
+Los archivos viven en `UPLOADS_DIR` (por defecto `backend/uploads`, fuera de git) y solo se pueden
+descargar con sesión `ADMIN`: `GET /api/solicitudes/archivos/:id`.
+
+**Vigencia de la matrícula:** se calcula automáticamente como el año del vehículo + 17 años
+(31 de diciembre). Se muestra en el formulario y queda guardada en `unidades.fechaExpiracion`.
+
+**Consulta de cédula (ZUINCONSUL):** `ZUINCONSUL_URL` + `ZUINCONSUL_TOKEN` en el backend. El token
+nunca se expone al navegador; el frontend llama a `GET /api/solicitudes/cedula/:documento`.
 
 ## Asistente IA (DeepSeek)
 

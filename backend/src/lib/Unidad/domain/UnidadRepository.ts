@@ -24,7 +24,7 @@ export type UpdateUnidadData = {
 };
 
 export interface UnidadRepository {
-  save(unidad: Unidad): Promise<Unidad>;
+  save(unidad: Unidad, extras?: { fechaExpiracion?: Date | null; matriculaArchivoId?: string | null }): Promise<Unidad>;
   findAll(filters: UnidadFilters): Promise<UnidadListResult>;
   findById(id: string): Promise<Unidad | null>;
   findByPlaca(placa: string): Promise<Unidad | null>;

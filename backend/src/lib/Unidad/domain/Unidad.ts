@@ -12,6 +12,8 @@ export class Unidad {
     public readonly estado: UnidadEstado,
     public readonly socioNombre?: string,
     public readonly socioEstado?: string,
-    public readonly createdAt?: Date
+    public readonly createdAt?: Date,
+    public readonly fechaExpiracion?: Date | null,
+    public readonly matriculaArchivoId?: string | null
   ) {}
 }

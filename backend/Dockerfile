@@ -24,6 +24,9 @@ COPY --from=build /app/package.json /app/package-lock.json ./
 COPY --from=build /app/node_modules ./node_modules
 COPY --from=build /app/dist ./dist
 
+# Carpeta de documentos cifrados (el volumen se monta aquí)
+RUN mkdir -p /app/uploads && chown -R node:node /app
+
 # Migraciones: el contenedor las aplica al arrancar
 COPY .sequelizerc ./
 COPY config ./config

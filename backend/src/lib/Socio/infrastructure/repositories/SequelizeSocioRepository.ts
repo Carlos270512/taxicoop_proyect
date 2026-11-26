@@ -21,12 +21,21 @@ function toDomain(row: any): Socio {
     row.estado,
     row.userAuth ? row.userAuth.email : undefined,
     Number(row.unidadesCount ?? 0),
-    row.createdAt
+    row.createdAt,
+    row.direccion ?? null,
+    row.socioSalienteId ?? null,
+    row.solicitudId ?? null
   );
 }
 
 export class SequelizeSocioRepository implements SocioRepository {
-  async createWithUser(socio: Socio, email: string, passwordHash: string, roles: string[]): Promise<Socio> {
+  async createWithUser(
+    socio: Socio,
+    email: string,
+    passwordHash: string,
+    roles: string[],
+    extras?: { direccion?: string | null; solicitudId?: string | null; socioSalienteId?: string | null }
+  ): Promise<Socio> {
     return await sequelize.transaction(async (transaction) => {
       await UserAuthModel.create(
         { id: socio.userId, email, passwordHash },
@@ -60,6 +69,9 @@ export class SequelizeSocioRepository implements SocioRepository {
           apellidos: socio.apellidos,
           telefono: socio.telefono,
           estado: socio.estado,
+          direccion: extras?.direccion ?? null,
+          solicitudId: extras?.solicitudId ?? null,
+          socioSalienteId: extras?.socioSalienteId ?? null,
         },
         { transaction }
       );

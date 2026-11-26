@@ -22,8 +22,20 @@ export type UpdateSocioData = {
   telefono?: string;
 };
 
+export type CreateSocioExtras = {
+  direccion?: string | null;
+  solicitudId?: string | null;
+  socioSalienteId?: string | null;
+};
+
 export interface SocioRepository {
-  createWithUser(socio: Socio, email: string, passwordHash: string, roles: string[]): Promise<Socio>;
+  createWithUser(
+    socio: Socio,
+    email: string,
+    passwordHash: string,
+    roles: string[],
+    extras?: CreateSocioExtras
+  ): Promise<Socio>;
   findAll(filters: SocioFilters): Promise<SocioListResult>;
   findById(id: string): Promise<Socio | null>;
   findByUserId(userId: string): Promise<Socio | null>;

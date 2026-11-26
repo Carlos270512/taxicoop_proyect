@@ -10,6 +10,9 @@ export class SocioModel extends Model {
   declare apellidos: string;
   declare telefono: string;
   declare estado: 'ACTIVO' | 'SUSPENDIDO' | 'RETIRADO';
+  declare direccion: string | null;
+  declare socioSalienteId: string | null;
+  declare solicitudId: string | null;
 }
 
 SocioModel.init(
@@ -48,6 +51,18 @@ SocioModel.init(
       type: DataTypes.ENUM('ACTIVO', 'SUSPENDIDO', 'RETIRADO'),
       allowNull: false,
       defaultValue: 'ACTIVO',
+    },
+    direccion: {
+      type: DataTypes.STRING(200),
+      allowNull: true,
+    },
+    socioSalienteId: {
+      type: DataTypes.UUID,
+      allowNull: true,
+    },
+    solicitudId: {
+      type: DataTypes.UUID,
+      allowNull: true,
     },
   },
   {

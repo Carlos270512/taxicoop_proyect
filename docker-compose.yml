@@ -54,11 +54,17 @@ services:
       DEEPSEEK_API_KEY: ${DEEPSEEK_API_KEY:-}
       DEEPSEEK_MODEL: ${DEEPSEEK_MODEL:-deepseek-chat}
       DEEPSEEK_BASE_URL: ${DEEPSEEK_BASE_URL:-https://api.deepseek.com}
+      ZUINCONSUL_URL: ${ZUINCONSUL_URL:-https://suilaft.tech/zuiconsul/api/v1/consulta.php}
+      ZUINCONSUL_TOKEN: ${ZUINCONSUL_TOKEN:-}
+      FILE_ENCRYPTION_KEY: ${FILE_ENCRYPTION_KEY:-}
+      UPLOADS_DIR: /app/uploads
     depends_on:
       postgres:
         condition: service_healthy
       mongo:
         condition: service_healthy
+    volumes:
+      - backend_uploads:/app/uploads
     networks:
       - taxicoop_net
     healthcheck:
@@ -91,6 +97,7 @@ services:
 volumes:
   pg_data:
   mongo_data:
+  backend_uploads:
 
 networks:
   taxicoop_net:

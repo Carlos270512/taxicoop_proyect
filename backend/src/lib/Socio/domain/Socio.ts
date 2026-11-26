@@ -13,6 +13,9 @@ export class Socio {
     public readonly estado: SocioEstado,
     public readonly email?: string,
     public readonly unidadesCount?: number,
-    public readonly createdAt?: Date
+    public readonly createdAt?: Date,
+    public readonly direccion?: string | null,
+    public readonly socioSalienteId?: string | null,
+    public readonly solicitudId?: string | null
   ) {}
 }
