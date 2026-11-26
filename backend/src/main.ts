@@ -11,6 +11,7 @@ import authRoutes from './lib/Identity/infrastructure/auth.routes';
 import dashboardRoutes from './lib/Dashboard/infrastructure/dashboard.routes';
 import votacionRouter from './lib/Votacion/infrastructure/votacion.routes';
 import assistantRoutes from './lib/Assistant/infrastructure/assistant.routes';
+import ubicacionRoutes from './lib/Ubicacion/infrastructure/ubicacion.routes';
 
 dotenv.config();
 
@@ -50,6 +51,7 @@ async function bootstrap() {
     app.use('/api/auth', authRoutes);
     app.use('/api/dashboard', dashboardRoutes);
     app.use('/api/assistant', assistantRoutes);
+    app.use('/api/ubicaciones', ubicacionRoutes);
    
 
     // Levantar servidor

@@ -1,4 +1,4 @@
-import { CarFront, Pencil, RotateCcw, ShieldOff, Trash2, UsersRound } from 'lucide-react';
+import { CarFront, MapPin, Pencil, RotateCcw, ShieldOff, Trash2, UsersRound } from 'lucide-react';
 import { EmptyState } from '@components/EmptyState';
 import { Table } from '@components/Table';
 import type { Column } from '@components/Table';
@@ -9,12 +9,21 @@ type SociosTableProps = {
   socios: Socio[];
   canManage: boolean;
   onViewUnidades: (socio: Socio) => void;
+  onViewUbicacion: (socio: Socio) => void;
   onEdit: (socio: Socio) => void;
   onToggleEstado: (socio: Socio) => void;
   onRetire: (socio: Socio) => void;
 };
 
-export function SociosTable({ socios, canManage, onViewUnidades, onEdit, onToggleEstado, onRetire }: SociosTableProps) {
+export function SociosTable({
+  socios,
+  canManage,
+  onViewUnidades,
+  onViewUbicacion,
+  onEdit,
+  onToggleEstado,
+  onRetire,
+}: SociosTableProps) {
   const columns: Column<Socio>[] = [
     {
       key: 'socio',
@@ -45,6 +54,16 @@ export function SociosTable({ socios, canManage, onViewUnidades, onEdit, onToggl
       className: 'cell-actions',
       render: (socio) => (
         <div className="row-actions">
+          <button
+            type="button"
+            className="icon-action"
+            title="Ver ubicación"
+            aria-label={`Ver la ubicación de ${socio.nombres} ${socio.apellidos}`}
+            onClick={() => onViewUbicacion(socio)}
+          >
+            <MapPin size={15} />
+          </button>
+
           <button
             type="button"
             className="icon-action"

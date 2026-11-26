@@ -61,6 +61,9 @@ npm run dev               # http://localhost:3000
 | POST / GET | `/api/auth/roles` | pública |
 | GET | `/api/socios?q=&estado=&page=&limit=` | JWT |
 | GET | `/api/socios/me` | JWT (perfil del socio autenticado + sus unidades) |
+| POST | `/api/ubicaciones/me` | JWT (el socio comparte su ubicación) |
+| GET | `/api/ubicaciones/me` | JWT (última ubicación propia) |
+| GET | `/api/ubicaciones/:socioId` | JWT · ADMIN (última ubicación + historial) |
 | GET | `/api/socios/:id` | JWT |
 | POST | `/api/socios` | JWT · ADMIN |
 | PUT | `/api/socios/:id` | JWT · ADMIN |
@@ -139,6 +142,25 @@ y **Votaciones** (`/votaciones` y `/votaciones/:id` con voto y resultados).
 - Las rutas de administración (`/socios`, `/vehiculos`, `/unidades` y los módulos pendientes)
   están protegidas en el front con `RequireRole`; el backend vuelve a validar el rol.
 - Módulos aún no terminados y ocultos en el menú: Conductores, Carreras, Pagos y Reportes.
+
+## Ubicación de los socios
+
+El socio comparte su ubicación desde **Mi perfil → Mi ubicación** (botón «Compartir mi ubicación»
+o la casilla para actualizarla cada 5 minutos). El administrador la consulta en **Socios**, con el
+botón 📍 de la columna *Acciones*: coordenadas, precisión, hora y enlace a Google Maps, más las
+últimas 10 capturas.
+
+- Tabla `ubicaciones_socio` (migración `20261120120011`), con índice por `(socioId, capturedAt)`.
+- El navegador solo entrega la ubicación si el usuario da permiso. **Requiere HTTPS** (o
+  `localhost`): en producción el panel debe servirse por HTTPS para que el GPS funcione.
+- El socio solo puede escribir y leer su propia ubicación; el historial es exclusivo de `ADMIN`.
+
+## Botón de emergencia
+
+Botón rojo flotante (junto al asistente) disponible para todos los roles. Abre un panel con los
+teléfonos de auxilio como enlaces `tel:` (desde el celular marcan directo): ECU 911, Policía
+Nacional 101, Bomberos 102 y Cruz Roja 131. Si defines `VITE_COOP_EMERGENCY_PHONE` en el
+`frontend/.env` aparece además la central de la cooperativa.
 
 ## Asistente IA (DeepSeek)
 

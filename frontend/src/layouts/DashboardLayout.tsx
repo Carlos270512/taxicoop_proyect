@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { useAuth } from '@features/auth';
 import { AssistantWidget } from '@features/assistant';
+import { EmergencyButton } from '@features/emergency';
 
 const navigation = [
   { label: 'Panel principal', path: '/', icon: LayoutDashboard, roles: ['ADMIN', 'SOCIO'] },
@@ -128,6 +129,7 @@ export function DashboardLayout() {
       </main>
       {menuOpen && <button type="button" className="user-menu-backdrop" aria-label="Cerrar menú" onClick={() => setMenuOpen(false)} />}
       <AssistantWidget />
+      <EmergencyButton />
     </div>
   );
 }

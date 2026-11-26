@@ -2,6 +2,7 @@ import { ArrowRight, ShieldAlert, Vote } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { PageHeader } from '@components/PageHeader';
 import { getApiErrorStatus, getApiErrorMessage } from '@shared/api/errors';
+import { UbicacionCard } from '@features/ubicacion';
 import { MisUnidadesTable } from '../components/MisUnidadesTable';
 import { ProfileSummary } from '../components/ProfileSummary';
 import { useMiPerfil } from '../hooks/useMiPerfil';
@@ -53,6 +54,8 @@ export function MiPerfilPage() {
       {header}
 
       <ProfileSummary socio={socio} />
+
+      <UbicacionCard />
 
       <div className="profile-grid">
         <section className="panel">

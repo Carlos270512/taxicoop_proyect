@@ -6,6 +6,7 @@ import { EmptyState } from '@components/EmptyState';
 import { Modal } from '@components/Modal';
 import { PageHeader } from '@components/PageHeader';
 import { useAuth } from '@features/auth';
+import { UbicacionModal } from '@features/ubicacion';
 import { getApiErrorMessage } from '@shared/api/errors';
 import { useDebounce } from '@shared/hooks/useDebounce';
 import { EMPTY_SOCIO_FILTERS } from '../model/types';
@@ -29,6 +30,7 @@ export function SociosPage() {
   const [modal, setModal] = useState<{ mode: 'create' | 'edit'; socio?: Socio } | null>(null);
   const [formError, setFormError] = useState<string | null>(null);
   const [toRetire, setToRetire] = useState<Socio | null>(null);
+  const [ubicacionDe, setUbicacionDe] = useState<Socio | null>(null);
   const [actionError, setActionError] = useState<string | null>(null);
 
   const socios = data?.data ?? [];
@@ -133,6 +135,7 @@ export function SociosPage() {
             socios={socios}
             canManage={canManage}
             onViewUnidades={(socio) => navigate(`/vehiculos?socioId=${socio.id}`)}
+            onViewUbicacion={setUbicacionDe}
             onEdit={(socio) => { setFormError(null); setModal({ mode: 'edit', socio }); }}
             onToggleEstado={handleToggleEstado}
             onRetire={setToRetire}
@@ -173,6 +176,8 @@ export function SociosPage() {
         onClose={() => { if (!isSaving) { setModal(null); setFormError(null); } }}
         onSubmit={handleSubmit}
       />
+
+      <UbicacionModal socio={ubicacionDe} onClose={() => setUbicacionDe(null)} />
 
       <Modal
         open={Boolean(toRetire)}

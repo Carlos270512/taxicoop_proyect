@@ -215,3 +215,42 @@
 /* entrada del panel del asistente (sin depender de animaciones JS) */
 .assistant-shell{animation:assistant-in .18s ease-out}
 @keyframes assistant-in{from{opacity:0;transform:translateY(14px) scale(.98)}to{opacity:1;transform:translateY(0) scale(1)}}
+/* ===== Ubicacion del socio ===== */
+.ubicacion-card{padding:16px;margin-bottom:14px}
+.ubicacion-current{display:flex;align-items:center;gap:12px;background:#f7fbfe;border:1px solid #e2edf6;border-radius:12px;padding:12px;margin-top:10px;flex-wrap:wrap}
+.ubicacion-pin{display:inline-flex;align-items:center;justify-content:center;width:36px;height:36px;border-radius:11px;background:#e6f1fb;color:#2479c7;flex:0 0 auto}
+.ubicacion-copy{flex:1;min-width:140px}
+.ubicacion-copy strong{display:block;font-size:12px;color:#26394c;font-variant-numeric:tabular-nums}
+.ubicacion-copy span{display:block;font-size:11px;color:#8b9aa8;margin-top:2px}
+.ubicacion-map-link{display:inline-flex;align-items:center;gap:5px;font-size:11px;font-weight:600;color:#2479c7;text-decoration:none;white-space:nowrap}
+.ubicacion-map-link:hover{color:#1b5f9e}
+.ubicacion-actions{display:flex;align-items:center;gap:14px;flex-wrap:wrap;margin-top:12px}
+.ubicacion-auto{display:inline-flex;align-items:center;gap:7px;font-size:11px;color:#5f7080;cursor:pointer}
+.ubicacion-auto input{accent-color:#2479c7}
+.ubicacion-notice{margin:10px 0 0;font-size:11px;color:#1f7a4d;background:#f0faf4;border:1px solid #d6efdf;border-radius:8px;padding:8px 10px}
+.ubicacion-error{display:flex;align-items:center;gap:7px;margin:10px 0 0;font-size:11px;color:#a63a3a;background:#fdf1f1;border:1px solid #f6d6d6;border-radius:8px;padding:8px 10px}
+.ubicacion-history{margin-top:14px}
+.ubicacion-history-title{display:block;font-size:10px;text-transform:uppercase;letter-spacing:.4px;color:#9aa9b6;margin-bottom:6px}
+.ubicacion-history ul{list-style:none;margin:0;padding:0;display:grid;gap:6px;max-height:170px;overflow-y:auto}
+.ubicacion-history li{display:flex;justify-content:space-between;gap:10px;font-size:11px;color:#7f8e9d;border-bottom:1px solid #f0f3f6;padding-bottom:6px}
+.ubicacion-history li:last-child{border:0;padding-bottom:0}
+.ubicacion-history a{color:#2479c7;text-decoration:none;font-variant-numeric:tabular-nums}
+.ubicacion-history a:hover{text-decoration:underline}
+
+/* ===== Boton de emergencia ===== */
+.emergency-fab{position:fixed;right:90px;bottom:24px;width:54px;height:54px;border-radius:50%;border:0;cursor:pointer;display:inline-flex;align-items:center;justify-content:center;color:#fff;background:linear-gradient(135deg,#e0453c,#b3231b);box-shadow:0 10px 24px rgba(179,35,27,.34);transition:transform .16s,box-shadow .16s;z-index:60}
+.emergency-fab:hover{transform:translateY(-2px);box-shadow:0 14px 28px rgba(179,35,27,.4)}
+.emergency-note{display:flex;align-items:flex-start;gap:8px;background:#fdf6f0;border:1px solid #f6e3d2;color:#8a5a2b;border-radius:10px;padding:9px 11px;font-size:11px;line-height:1.5;margin:0 0 12px}
+.emergency-list{display:grid;gap:9px}
+.emergency-item{display:flex;align-items:center;gap:11px;border:1px solid #e6ebf0;border-radius:12px;padding:11px 12px;text-decoration:none;color:inherit;transition:.15s;background:#fff}
+.emergency-item:hover{border-color:#cfdae4;background:#fafcfe}
+.emergency-icon{display:inline-flex;align-items:center;justify-content:center;width:34px;height:34px;border-radius:10px;flex:0 0 auto;background:#eef2f6;color:#5f7080}
+.emergency-item.tone-red .emergency-icon{background:#fdeceb;color:#c8382e}
+.emergency-item.tone-blue .emergency-icon{background:#e9f2fb;color:#2479c7}
+.emergency-item.tone-green .emergency-icon{background:#ecf9f1;color:#1f7a4d}
+.emergency-item.tone-orange .emergency-icon{background:#fdf3e6;color:#b9752a}
+.emergency-copy{flex:1;min-width:0}
+.emergency-copy strong{display:block;font-size:12px;color:#26394c}
+.emergency-copy span{display:block;font-size:10.5px;color:#8b9aa8;margin-top:2px}
+.emergency-number{font-size:13px;font-weight:700;color:#26394c;font-variant-numeric:tabular-nums;white-space:nowrap}
+@media (max-width:640px){.emergency-fab{right:82px;bottom:16px}}
