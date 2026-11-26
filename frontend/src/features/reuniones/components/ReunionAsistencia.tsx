@@ -1,24 +1,23 @@
 import { useEffect, useMemo, useState } from 'react';
-import { CalendarDays, CheckCheck, CheckCircle2, Search, ShieldAlert, UsersRound, XCircle } from 'lucide-react';
+import { CheckCheck, CheckCircle2, Search, ShieldAlert, UsersRound, XCircle } from 'lucide-react';
 import { Badge } from '@components/Badge';
 import { Button } from '@components/Button';
 import { EmptyState } from '@components/EmptyState';
 import { getApiErrorMessage } from '@shared/api/errors';
 import { useDebounce } from '@shared/hooks/useDebounce';
-import { formatFechaLarga, hoyISO } from '../model/types';
-import { useAsistencia, useAsistenciaMutation } from '../hooks/useAsistencia';
+import { useReunionDetalle, useReunionMutations } from '../hooks/useReuniones';
 
-/** Marca de asistencia de los socios para una fecha (dentro del modulo de votaciones). */
-export function AsistenciaPanel() {
-  const [fecha, setFecha] = useState(hoyISO);
-  const [query, setQuery] = useState('');
+/** Marcado de asistencia de una reunión concreta (solo administración). */
+export function ReunionAsistencia({ reunionId }: { reunionId: string }) {
+  const { data, isLoading, isError, error } = useReunionDetalle(reunionId);
+  const { guardarAsistencia } = useReunionMutations();
+
   const [borrador, setBorrador] = useState<Record<string, boolean>>({});
+  const [query, setQuery] = useState('');
   const [notice, setNotice] = useState<string | null>(null);
-  const [error, setError] = useState<string | null>(null);
+  const [saveError, setSaveError] = useState<string | null>(null);
 
   const debouncedQuery = useDebounce(query, 250);
-  const { data, isLoading, isError, error: queryError } = useAsistencia(fecha);
-  const save = useAsistenciaMutation(fecha);
 
   useEffect(() => {
     if (!data) return;
@@ -26,7 +25,6 @@ export function AsistenciaPanel() {
     for (const fila of data.registros) next[fila.socioId] = fila.presente;
     setBorrador(next);
     setNotice(null);
-    setError(null);
   }, [data]);
 
   const registros = data?.registros ?? [];
@@ -34,47 +32,58 @@ export function AsistenciaPanel() {
   const filtrados = useMemo(() => {
     const term = debouncedQuery.trim().toLowerCase();
     if (!term) return registros;
+
     return registros.filter(
       (fila) => fila.nombre.toLowerCase().includes(term) || fila.cedulaRuc.includes(term)
     );
   }, [registros, debouncedQuery]);
 
   const presentes = registros.filter((fila) => borrador[fila.socioId]).length;
-  const total = registros.length;
-
-  function toggle(socioId: string) {
-    setBorrador((current) => ({ ...current, [socioId]: !current[socioId] }));
-    setNotice(null);
-  }
-
-  function marcarTodos(valor: boolean) {
-    const next: Record<string, boolean> = {};
-    for (const fila of registros) next[fila.socioId] = valor;
-    setBorrador(next);
-    setNotice(null);
-  }
 
   async function guardar() {
-    setError(null);
+    setSaveError(null);
     setNotice(null);
 
     try {
-      await save.mutateAsync(registros.map((fila) => ({ socioId: fila.socioId, presente: Boolean(borrador[fila.socioId]) })));
+      await guardarAsistencia.mutateAsync({
+        id: reunionId,
+        registros: registros.map((fila) => ({ socioId: fila.socioId, presente: Boolean(borrador[fila.socioId]) })),
+      });
       setNotice('Asistencia guardada correctamente.');
     } catch (requestError) {
-      setError(getApiErrorMessage(requestError, 'No se pudo guardar la asistencia.'));
+      setSaveError(getApiErrorMessage(requestError, 'No se pudo guardar la asistencia.'));
     }
+  }
+
+  if (isLoading) return <p className="table-note">Cargando socios…</p>;
+
+  if (isError) {
+    return (
+      <div className="inline-alert" role="alert">
+        <ShieldAlert size={15} />
+        <span>{getApiErrorMessage(error, 'No se pudo cargar la reunión.')}</span>
+      </div>
+    );
   }
 
   return (
     <>
-      <div className="asistencia-bar">
-        <label className="asistencia-fecha">
-          <CalendarDays size={15} />
-          <input type="date" value={fecha} max={hoyISO()} onChange={(event) => setFecha(event.target.value)} />
-        </label>
-        <span className="asistencia-dia">{formatFechaLarga(fecha)}</span>
+      <div className="asistencia-summary">
+        <span className="asistencia-chip green">
+          <CheckCircle2 size={14} /> {presentes} presentes
+        </span>
+        <span className="asistencia-chip red">
+          <XCircle size={14} /> {registros.length - presentes} ausentes
+        </span>
+        <span className="asistencia-chip">
+          <UsersRound size={14} /> {registros.length} socios
+        </span>
+        <span className="asistencia-pct">
+          {registros.length > 0 ? Math.round((presentes / registros.length) * 100) : 0}% asistencia
+        </span>
+      </div>
 
+      <div className="asistencia-bar">
         <div className="asistencia-search">
           <Search size={15} />
           <input
@@ -84,50 +93,45 @@ export function AsistenciaPanel() {
             aria-label="Buscar socio"
           />
         </div>
-      </div>
-
-      <div className="asistencia-summary">
-        <span className="asistencia-chip green">
-          <CheckCircle2 size={14} /> {presentes} presentes
-        </span>
-        <span className="asistencia-chip red">
-          <XCircle size={14} /> {total - presentes} ausentes
-        </span>
-        <span className="asistencia-chip">
-          <UsersRound size={14} /> {total} socios
-        </span>
-        <span className="asistencia-pct">{total > 0 ? Math.round((presentes / total) * 100) : 0}% asistencia</span>
         <div className="asistencia-bulk">
-          <Button variant="ghost" size="sm" onClick={() => marcarTodos(true)} disabled={total === 0}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              const next: Record<string, boolean> = {};
+              for (const fila of registros) next[fila.socioId] = true;
+              setBorrador(next);
+            }}
+          >
             <CheckCheck size={14} /> Todos presentes
           </Button>
-          <Button variant="ghost" size="sm" onClick={() => marcarTodos(false)} disabled={total === 0}>
+          <Button
+            variant="ghost"
+            size="sm"
+            onClick={() => {
+              const next: Record<string, boolean> = {};
+              for (const fila of registros) next[fila.socioId] = false;
+              setBorrador(next);
+            }}
+          >
             Limpiar
           </Button>
         </div>
       </div>
 
-      {isError ? (
-        <div className="inline-alert" role="alert">
-          <ShieldAlert size={15} />
-          <span>{getApiErrorMessage(queryError, 'No se pudo cargar la asistencia.')}</span>
-        </div>
-      ) : null}
-
-      {isLoading ? (
-        <p className="table-note">Cargando socios…</p>
-      ) : filtrados.length === 0 ? (
-        <EmptyState icon={UsersRound} title="Sin socios" description="No hay socios que coincidan con la búsqueda." />
+      {filtrados.length === 0 ? (
+        <EmptyState icon={UsersRound} title="Sin resultados" description="No hay socios que coincidan con la búsqueda." />
       ) : (
         <div className="asistencia-list">
           {filtrados.map((fila) => {
             const presente = Boolean(borrador[fila.socioId]);
+
             return (
               <button
                 key={fila.socioId}
                 type="button"
                 className={`asistencia-row${presente ? ' presente' : ''}`}
-                onClick={() => toggle(fila.socioId)}
+                onClick={() => setBorrador((current) => ({ ...current, [fila.socioId]: !presente }))}
                 aria-pressed={presente}
               >
                 <span className={`asistencia-check${presente ? ' on' : ''}`}>
@@ -148,11 +152,15 @@ export function AsistenciaPanel() {
       )}
 
       {notice ? <p className="ubicacion-notice">{notice}</p> : null}
-      {error ? <p className="form-error" role="alert">{error}</p> : null}
+      {saveError ? (
+        <p className="form-error" role="alert">
+          {saveError}
+        </p>
+      ) : null}
 
       <div className="asistencia-actions">
-        <Button onClick={guardar} disabled={save.isPending || total === 0}>
-          {save.isPending ? 'Guardando…' : 'Guardar asistencia'}
+        <Button onClick={guardar} disabled={guardarAsistencia.isPending || registros.length === 0}>
+          {guardarAsistencia.isPending ? 'Guardando…' : 'Guardar asistencia'}
         </Button>
       </div>
     </>

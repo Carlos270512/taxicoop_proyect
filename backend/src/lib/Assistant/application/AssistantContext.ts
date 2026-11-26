@@ -3,6 +3,7 @@ import { SocioRepository } from '../../Socio/domain/SocioRepository';
 import { UnidadRepository } from '../../Unidad/domain/UnidadRepository';
 import { VotacionRepository } from '../../Votacion/domain/VotacionRepository';
 import { AsistenciaRepository } from '../../Asistencia/domain/AsistenciaRepository';
+import { ReunionRepository } from '../../Reunion/domain/ReunionRepository';
 import { MapaRepository } from '../../Ubicacion/infrastructure/repositories/MapaRepository';
 
 export type AssistantContextInput = {
@@ -25,7 +26,8 @@ export class AssistantContextBuilder {
     private readonly unidadRepository: UnidadRepository,
     private readonly votacionRepository: VotacionRepository,
     private readonly asistenciaRepository: AsistenciaRepository,
-    private readonly mapaRepository: MapaRepository
+    private readonly mapaRepository: MapaRepository,
+    private readonly reunionRepository: ReunionRepository
   ) {}
 
   async build({ userId, roles }: AssistantContextInput): Promise<string> {
@@ -89,10 +91,10 @@ export class AssistantContextBuilder {
     for (const socio of result.items) {
       const ubicacion = await this.unidadRepository.findAll({ socioId: socio.id, page: 1, limit: 1 });
       const unidad = ubicacion.items[0];
-      const asistencia = await this.asistenciaRepository.findUltimaBySocioId(socio.id);
+      const asistencia = await this.reunionRepository.findUltimaBySocioId(socio.id);
 
       lines.push(
-        `  - ${socio.nombres} ${socio.apellidos} | CI ${socio.cedulaRuc} | ${socio.estado} | tel ${socio.telefono} | ${socio.unidadesCount ?? 0} unidad(es)${unidad ? ` (${unidad.numeroUnidad} ${unidad.placa})` : ''}${asistencia ? ` | ultima reunion ${asistencia.fecha}: ${asistencia.presente ? 'presente' : 'ausente'}` : ''}`
+        `  - ${socio.nombres} ${socio.apellidos} | CI ${socio.cedulaRuc} | ${socio.estado} | tel ${socio.telefono} | ${socio.unidadesCount ?? 0} unidad(es)${unidad ? ` (${unidad.numeroUnidad} ${unidad.placa})` : ''}${asistencia ? ` | ultima reunion "${asistencia.titulo}" (${asistencia.fecha}): ${asistencia.presente ? 'presente' : 'ausente'}` : ''}`
       );
     }
 
@@ -128,11 +130,17 @@ export class AssistantContextBuilder {
 
   /** Asistencia de la ultima reunion registrada. */
   private async attendanceLines(): Promise<string[]> {
-    const fecha = await this.asistenciaRepository.findUltimaFecha();
-    if (!fecha) return ['- Asistencia: todavia no se ha registrado ninguna reunion.'];
+    const ultima = await this.reunionRepository.findUltima();
+    if (!ultima) return ['- Asistencia: todavia no se ha registrado ninguna reunion.'];
 
-    const presentes = await this.asistenciaRepository.countPresentesByFecha(fecha);
-    return [`- Asistencia ultima reunion (${fecha}): ${presentes} socios presentes.`];
+    const { reunion, presentes } = ultima;
+    const linea = `- Asistencia ultima reunion "${reunion.titulo}" (${reunion.fecha}): ${presentes} de ${reunion.totalSocios} socios presentes.`;
+
+    if (reunion.eleccionTitulo) {
+      return [linea, `  - Eleccion vinculada: "${reunion.eleccionTitulo}" (${reunion.eleccionEstado}).`];
+    }
+
+    return [linea];
   }
 
   private async buildSocioContext(userId: string): Promise<string> {
@@ -182,10 +190,10 @@ export class AssistantContextBuilder {
       }
     }
 
-    const asistencia = await this.asistenciaRepository.findUltimaBySocioId(socio.id);
+    const asistencia = await this.reunionRepository.findUltimaBySocioId(socio.id);
     if (asistencia) {
       lines.push(
-        `- Asistencia a la ultima reunion (${asistencia.fecha}): ${asistencia.presente ? 'PRESENTE' : 'AUSENTE'}.`
+        `- Asistencia a la ultima reunion "${asistencia.titulo}" (${asistencia.fecha}): ${asistencia.presente ? 'PRESENTE' : 'AUSENTE'}.`
       );
     } else {
       lines.push('- Asistencia: no tienes registro de asistencia a reuniones.');

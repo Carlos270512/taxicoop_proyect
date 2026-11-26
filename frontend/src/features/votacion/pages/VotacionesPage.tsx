@@ -4,7 +4,6 @@ import { useNavigate } from 'react-router-dom';
 import { Button } from '@components/Button';
 import { PageHeader } from '@components/PageHeader';
 import { useAuth } from '@features/auth';
-import { AsistenciaPanel } from '@features/asistencia';
 import { getApiErrorMessage } from '@shared/api/errors';
 import { EMPTY_ELECTION_FILTERS } from '../model/types';
 import type { ElectionFilters, ElectionFormValues, ElectionStatus } from '../model/types';
@@ -24,7 +23,6 @@ export function VotacionesPage() {
   const canManage = user?.roles.includes('ADMIN') ?? false;
   const navigate = useNavigate();
 
-  const [seccion, setSeccion] = useState<'elecciones' | 'asistencia'>('elecciones');
   const [filters, setFilters] = useState<ElectionFilters>(EMPTY_ELECTION_FILTERS);
   const { data, isLoading, isError, error, refetch } = useElections(filters);
 
@@ -80,33 +78,6 @@ export function VotacionesPage() {
       />
 
       <div className="panel table-panel">
-        {canManage ? (
-          <div className="tabs" role="tablist" aria-label="Secciones de votaciones">
-            <button
-              type="button"
-              role="tab"
-              aria-selected={seccion === 'elecciones'}
-              className={`tab${seccion === 'elecciones' ? ' active' : ''}`}
-              onClick={() => setSeccion('elecciones')}
-            >
-              Elecciones
-            </button>
-            <button
-              type="button"
-              role="tab"
-              aria-selected={seccion === 'asistencia'}
-              className={`tab${seccion === 'asistencia' ? ' active' : ''}`}
-              onClick={() => setSeccion('asistencia')}
-            >
-              Asistencia
-            </button>
-          </div>
-        ) : null}
-
-        {seccion === 'asistencia' && canManage ? (
-          <AsistenciaPanel />
-        ) : (
-          <>
         <div className="tabs" role="tablist" aria-label="Filtrar elecciones">
           {TABS.map((tab) => (
             <button
@@ -162,8 +133,6 @@ export function VotacionesPage() {
             </Button>
           </div>
         ) : null}
-          </>
-        )}
       </div>
 
       <ElectionFormModal

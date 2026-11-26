@@ -65,8 +65,12 @@ npm run dev               # http://localhost:3000
 | GET | `/api/ubicaciones/me` | JWT (última ubicación propia) |
 | GET | `/api/ubicaciones/:socioId` | JWT · ADMIN (última ubicación + historial) |
 | GET | `/api/ubicaciones/mapa/taxis` | JWT · ADMIN (mapa de taxis) |
-| GET | `/api/asistencias?fecha=AAAA-MM-DD` | JWT · ADMIN |
-| PUT | `/api/asistencias` | JWT · ADMIN (marcar asistencia del día) |
+| GET | `/api/reuniones?page=&limit=` | JWT · ADMIN (historial con % de asistencia) |
+| POST | `/api/reuniones` | JWT · ADMIN (motivo, fecha, elección opcional) |
+| GET | `/api/reuniones/:id` | JWT · ADMIN (detalle + socios) |
+| PUT | `/api/reuniones/:id/asistencia` | JWT · ADMIN |
+| DELETE | `/api/reuniones/:id` | JWT · ADMIN |
+| GET | `/api/reuniones/mias` | JWT (historial del socio) |
 | GET | `/api/reglamentos` | JWT (ADMIN y SOCIO) |
 | GET | `/api/reglamentos/:id/archivo` | JWT (ver/descargar PDF descifrado) |
 | POST | `/api/reglamentos` | JWT · ADMIN (multipart, solo PDF) |
@@ -222,14 +226,21 @@ Módulo **Reglamento** en el menú (debajo de Socios), visible para `ADMIN` y `S
 - Los PDF se guardan **cifrados** (AES-256-GCM) igual que los documentos de postulación y se
   descifran al abrirlos en el navegador.
 
-## Asistencia (dentro de Votaciones)
+## Reuniones y asistencia
 
-La pantalla de **Votaciones** tiene dos pestañas: **Elecciones** y **Asistencia** (solo `ADMIN`).
-En Asistencia se elige una fecha y se marca quién está presente, con búsqueda por nombre o cédula,
-contadores (presentes / ausentes / % de asistencia) y botones «Todos presentes» y «Limpiar».
+Módulo **Reuniones** en el menú (visible para `ADMIN` y `SOCIO`). Reemplaza la antigua pestaña de
+asistencia suelta por un historial real de reuniones.
 
-- Tabla `asistencias` (`fecha` + `socioId` único, `presente`, `registradoPor`).
-- Los socios retirados no aparecen en la lista.
+| Rol | Qué hace |
+|---|---|
+| `ADMIN` | Crea reuniones (**motivo**, fecha, detalle y **elección vinculada opcional**), marca o corrige la asistencia de cada socio, ve el % por reunión y puede eliminarla |
+| `SOCIO` | Consulta su historial: motivo, fecha, si estuvo **presente/ausente** y la elección vinculada con botón **Votar ahora** si está activa (o la insignia «Ya votaste») |
+
+- Tablas `reuniones` + `asistencias` (`reunionId`, único por socio y reunión). Las asistencias
+  sueltas por fecha se migraron automáticamente a reuniones históricas.
+- Vincular una elección permite votar en la misma reunión: desde **Reuniones → Votar ahora** el
+  socio llega a `/votaciones/:id` y su voto queda registrado con su usuario.
+- El panel del socio incluye el bloque **Mis reuniones** con las últimas tres y su asistencia.
 
 ## Mapa de taxis (Leaflet)
 

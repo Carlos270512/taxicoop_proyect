@@ -1,4 +1,4 @@
-import { ArrowRight, CarFront, CheckCircle2, ChevronRight, ShieldAlert, ShieldCheck, Vote } from 'lucide-react';
+import { ArrowRight, CarFront, CheckCircle2, ChevronRight, ShieldAlert, ShieldCheck, Vote, CalendarCheck } from 'lucide-react';
 import { Link } from 'react-router-dom';
 import { Badge } from '@components/Badge';
 import { EmptyState } from '@components/EmptyState';
@@ -6,6 +6,7 @@ import { PageHeader } from '@components/PageHeader';
 import { StatCard } from '@components/StatCard';
 import { useAuth } from '@features/auth';
 import { formatDate, useMiPerfil } from '@features/perfil';
+import { formatFechaLarga, useMisReuniones } from '@features/reuniones';
 import { UnidadStatusBadge } from '@features/unidades';
 import { formatPeriod, useActiveElections } from '@features/votacion';
 import { getApiErrorMessage } from '@shared/api/errors';
@@ -14,12 +15,14 @@ export function SocioDashboardPage() {
   const { user } = useAuth();
   const { data, isLoading, isError, error } = useMiPerfil();
   const { data: activeElections } = useActiveElections();
+  const { data: misReuniones } = useMisReuniones();
 
   const socio = data?.socio;
   const unidades = data?.unidades ?? [];
   const operativas = unidades.filter((unidad) => unidad.estado === 'OPERATIVA').length;
   const elecciones = activeElections ?? [];
   const pendientes = elecciones.filter((election) => !election.hasVoted).length;
+  const reuniones = (misReuniones ?? []).slice(0, 3);
 
   const greeting = socio ? `${socio.nombres} ${socio.apellidos}` : user?.name ?? 'Socio';
 
@@ -86,8 +89,7 @@ export function SocioDashboardPage() {
           }
           icon={Vote}
           tone="orange"
-        />
-      </div>
+        />      </div>
 
       <div className="socio-grid">
         <section className="panel">
@@ -116,6 +118,45 @@ export function SocioDashboardPage() {
                     <span>{formatPeriod(election.startDate, election.endDate)}</span>
                   </div>
                   {election.hasVoted ? <Badge tone="green">Ya votaste</Badge> : <Badge tone="orange">Pendiente</Badge>}
+                  <ChevronRight size={16} />
+                </Link>
+              ))}
+            </div>
+          )}
+        </section>
+
+        <section className="panel">
+          <div className="panel-heading">
+            <div>
+              <h2>Mis reuniones</h2>
+              <p>Tu asistencia a las últimas reuniones</p>
+            </div>
+            <Link to="/reuniones" className="text-button">
+              Ver todas <ArrowRight size={15} />
+            </Link>
+          </div>
+
+          {reuniones.length === 0 ? (
+            <EmptyState
+              icon={CalendarCheck}
+              title="Sin reuniones registradas"
+              description="Cuando la cooperativa registre una reunión verás aquí tu asistencia."
+            />
+          ) : (
+            <div className="socio-list">
+              {reuniones.map((reunion) => (
+                <Link key={reunion.id} to="/reuniones" className="socio-list-row">
+                  <div className="socio-list-main">
+                    <strong>{reunion.titulo}</strong>
+                    <span>{formatFechaLarga(reunion.fecha)}</span>
+                  </div>
+                  {reunion.asistencia === 'PRESENTE' ? (
+                    <Badge tone="green">Presente</Badge>
+                  ) : reunion.asistencia === 'AUSENTE' ? (
+                    <Badge tone="red">Ausente</Badge>
+                  ) : (
+                    <Badge tone="gray">Sin registrar</Badge>
+                  )}
                   <ChevronRight size={16} />
                 </Link>
               ))}

@@ -9,6 +9,7 @@ import { SequelizeUnidadRepository } from '../../Unidad/infrastructure/repositor
 import { SequelizeVotacionRepository } from '../../Votacion/infrastructure/repositories/SequelizeVotacionRepository';
 import { SequelizeAsistenciaRepository } from '../../Asistencia/infrastructure/repositories/SequelizeAsistenciaRepository';
 import { MapaRepository } from '../../Ubicacion/infrastructure/repositories/MapaRepository';
+import { SequelizeReunionRepository } from '../../Reunion/infrastructure/repositories/SequelizeReunionRepository';
 import { DeepSeekAssistantRepository } from './repositories/DeepSeekAssistantRepository';
 import { parseMessages } from './assistant.validation';
 import { checkAssistantRateLimit } from './rateLimiter';
@@ -21,7 +22,8 @@ const contextBuilder = new AssistantContextBuilder(
   new SequelizeUnidadRepository(),
   new SequelizeVotacionRepository(),
   new SequelizeAsistenciaRepository(),
-  new MapaRepository()
+  new MapaRepository(),
+  new SequelizeReunionRepository()
 );
 const askAssistantUseCase = new AskAssistantUseCase(new DeepSeekAssistantRepository(), contextBuilder);
 
