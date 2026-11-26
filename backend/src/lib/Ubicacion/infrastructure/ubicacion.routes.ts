@@ -6,6 +6,7 @@ import { SequelizeUbicacionRepository } from './repositories/SequelizeUbicacionR
 import { SaveMyUbicacionUseCase } from '../application/SaveMyUbicacion';
 import { GetMyUbicacionUseCase } from '../application/GetMyUbicacion';
 import { GetSocioUbicacionUseCase } from '../application/GetSocioUbicacion';
+import { MapaRepository } from './repositories/MapaRepository';
 
 const router = Router();
 
@@ -14,6 +15,7 @@ const ubicacionRepository = new SequelizeUbicacionRepository();
 const saveMyUbicacionUseCase = new SaveMyUbicacionUseCase(socioRepository, ubicacionRepository);
 const getMyUbicacionUseCase = new GetMyUbicacionUseCase(socioRepository, ubicacionRepository);
 const getSocioUbicacionUseCase = new GetSocioUbicacionUseCase(socioRepository, ubicacionRepository);
+const mapaRepository = new MapaRepository();
 
 function fail(res: Response, error: unknown) {
   let status = 500;
@@ -62,6 +64,16 @@ router.get('/:socioId', authorizeRoles('ADMIN'), async (req: AuthenticatedReques
   try {
     const ubicacion = await getSocioUbicacionUseCase.run(String(req.params.socioId));
     return res.status(200).json({ success: true, data: ubicacion });
+  } catch (error) {
+    return fail(res, error);
+  }
+});
+
+// Mapa de taxis: última ubicación de cada socio con su unidad
+router.get('/mapa/taxis', authorizeRoles('ADMIN'), async (_req: AuthenticatedRequest, res) => {
+  try {
+    const taxis = await mapaRepository.findTaxis();
+    return res.status(200).json({ success: true, data: taxis });
   } catch (error) {
     return fail(res, error);
   }

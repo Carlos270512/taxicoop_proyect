@@ -13,6 +13,7 @@ import '../../../Socio/infrastructure/models/associations';
 import '../../../Ubicacion/infrastructure/models/Ubicacion.model';
 import '../../../Solicitud/infrastructure/models/Solicitud.model';
 import '../../../Solicitud/infrastructure/models/Archivo.model';
+import '../../../Asistencia/infrastructure/models/Asistencia.model';
 
 
 export function registerModels() {

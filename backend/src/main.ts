@@ -13,6 +13,7 @@ import votacionRouter from './lib/Votacion/infrastructure/votacion.routes';
 import assistantRoutes from './lib/Assistant/infrastructure/assistant.routes';
 import ubicacionRoutes from './lib/Ubicacion/infrastructure/ubicacion.routes';
 import solicitudRoutes from './lib/Solicitud/infrastructure/solicitud.routes';
+import asistenciaRoutes from './lib/Asistencia/infrastructure/asistencia.routes';
 
 dotenv.config();
 
@@ -54,6 +55,7 @@ async function bootstrap() {
     app.use('/api/assistant', assistantRoutes);
     app.use('/api/ubicaciones', ubicacionRoutes);
     app.use('/api/solicitudes', solicitudRoutes);
+    app.use('/api/asistencias', asistenciaRoutes);
    
 
     // Levantar servidor

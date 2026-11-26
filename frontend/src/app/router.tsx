@@ -7,6 +7,7 @@ import { SociosPage } from '@features/socios/pages/SociosPage';
 import { UnidadesPage } from '@features/unidades/pages/UnidadesPage';
 import { MiPerfilPage } from '@features/perfil/pages/MiPerfilPage';
 import { PostulacionPublicaPage } from '@features/solicitudes/pages/PostulacionPublicaPage';
+import { MapaPage } from '@features/mapa/pages/MapaPage';
 import { VotacionesPage } from '@features/votacion/pages/VotacionesPage';
 import { VotacionDetallePage } from '@features/votacion/pages/VotacionDetallePage';
 import { HomePage } from './HomePage';
@@ -31,6 +32,7 @@ export const router = createBrowserRouter([
           { path: 'unidades', element: adminOnly(<UnidadesPage />) },
           { path: 'votaciones', element: <VotacionesPage /> },
           { path: 'votaciones/:id', element: <VotacionDetallePage /> },
+          { path: 'mapa', element: adminOnly(<MapaPage />) },
           { path: ':module', element: adminOnly(<ModulePage />) },
           { path: '*', element: <Navigate to="/" replace /> },
         ],

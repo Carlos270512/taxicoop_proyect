@@ -304,3 +304,57 @@
 .public-success h1{margin:4px 0 0;font-size:18px;color:#26394c}
 .public-success p{margin:0;font-size:12px;color:#7f8e9d;max-width:420px;line-height:1.6}
 @media (max-width:760px){.public-grid{grid-template-columns:1fr}.solicitud-grid{grid-template-columns:1fr}}
+/* ===== Asistencia ===== */
+.asistencia-bar{display:flex;align-items:center;gap:12px;flex-wrap:wrap;margin-bottom:12px}
+.asistencia-fecha{display:inline-flex;align-items:center;gap:7px;border:1px solid #e2e9f0;border-radius:10px;padding:7px 11px;background:#fff;color:#5f7080}
+.asistencia-fecha input{border:0;outline:none;font-size:11.5px;color:#26394c;font-family:inherit;background:transparent}
+.asistencia-dia{font-size:11px;color:#8b9aa8;text-transform:capitalize}
+.asistencia-search{display:inline-flex;align-items:center;gap:7px;border:1px solid #e2e9f0;border-radius:10px;padding:7px 11px;background:#fff;flex:1;min-width:200px}
+.asistencia-search input{border:0;outline:none;font-size:11.5px;width:100%;font-family:inherit;color:#26394c}
+.asistencia-search svg{color:#9aa9b6}
+.asistencia-summary{display:flex;align-items:center;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.asistencia-chip{display:inline-flex;align-items:center;gap:6px;background:#f4f7fa;border:1px solid #e6ebf0;border-radius:999px;padding:5px 11px;font-size:10.5px;font-weight:600;color:#5f7080}
+.asistencia-chip.green{background:#f0faf4;border-color:#d6efdf;color:#1f7a4d}
+.asistencia-chip.red{background:#fdf1f1;border-color:#f6d6d6;color:#a63a3a}
+.asistencia-pct{margin-left:auto;font-size:11px;font-weight:700;color:#2479c7}
+.asistencia-bulk{display:flex;gap:6px}
+.asistencia-list{display:grid;gap:7px;max-height:460px;overflow-y:auto;padding-right:4px}
+.asistencia-row{display:flex;align-items:center;gap:11px;width:100%;text-align:left;border:1px solid #e6ebf0;background:#fff;border-radius:11px;padding:10px 12px;cursor:pointer;transition:.15s}
+.asistencia-row:hover{border-color:#cfe0ef;background:#fafcfe}
+.asistencia-row.presente{border-color:#bfe3cd;background:#f4fbf7}
+.asistencia-check{width:22px;height:22px;border-radius:7px;border:1.5px solid #cfdae4;display:inline-flex;align-items:center;justify-content:center;color:#fff;flex:0 0 auto;background:#fff}
+.asistencia-check.on{background:#22a06b;border-color:#22a06b}
+.asistencia-info{flex:1;min-width:0}
+.asistencia-info strong{display:block;font-size:11.5px;color:#26394c}
+.asistencia-info span{display:block;font-size:10.5px;color:#8b9aa8;margin-top:2px}
+.asistencia-state{font-size:10px;font-weight:700;text-transform:uppercase;letter-spacing:.4px;color:#a63a3a;white-space:nowrap}
+.asistencia-state.on{color:#1f7a4d}
+.asistencia-actions{display:flex;justify-content:flex-end;margin-top:14px}
+
+/* ===== Mapa de taxis ===== */
+.mapa-stats{display:flex;gap:8px;flex-wrap:wrap;margin-bottom:12px}
+.mapa-layout{display:grid;grid-template-columns:1fr 300px;gap:14px;align-items:start}
+.mapa-canvas{position:relative;border-radius:16px;overflow:hidden;border:1px solid #d9e4ee;box-shadow:0 14px 34px rgba(15,35,58,.14);background:#0d1b26}
+.mapa-leaflet{height:560px;width:100%}
+.mapa-leaflet .leaflet-container{background:#0d1b26;font-family:inherit}
+.leaflet-container a{color:#2479c7}
+.leaflet-popup-content{font-size:11.5px;line-height:1.6;color:#26394c}
+.leaflet-popup-content strong{display:block;font-size:12px;color:#1b3b57}
+.leaflet-tooltip{font-size:11px;border-radius:8px;border:0;box-shadow:0 6px 18px rgba(15,35,58,.22);padding:6px 9px}
+.mapa-empty{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:7px;background:rgba(13,27,38,.82);color:#dbe8f2;text-align:center;padding:20px}
+.mapa-empty strong{font-size:13px}
+.mapa-empty span{font-size:11px;color:#9fb4c7;max-width:320px}
+.mapa-side{background:#fff;border:1px solid #e6ebf0;border-radius:16px;padding:14px;display:flex;flex-direction:column;gap:10px}
+.mapa-side-head{display:flex;align-items:baseline;justify-content:space-between;gap:8px}
+.mapa-side-head h2{margin:0;font-size:12.5px;color:#26394c}
+.mapa-side-head span{font-size:10.5px;color:#8b9aa8}
+.mapa-list{display:grid;gap:6px;max-height:430px;overflow-y:auto}
+.mapa-item{display:flex;align-items:center;gap:9px;border:1px solid #eef2f6;background:#fff;border-radius:10px;padding:9px 10px;cursor:pointer;transition:.15s;text-align:left}
+.mapa-item:hover{border-color:#cfe0ef;background:#fafcfe}
+.mapa-item.active{border-color:#9cc7ee;background:#f4faff;box-shadow:0 0 0 3px #e9f3ff}
+.mapa-dot{width:9px;height:9px;border-radius:50%;flex:0 0 auto;box-shadow:0 0 0 3px rgba(34,160,107,.16)}
+.mapa-item-copy{flex:1;min-width:0}
+.mapa-item-copy strong{display:block;font-size:11.5px;color:#26394c}
+.mapa-item-copy span{display:block;font-size:10.5px;color:#8b9aa8}
+.mapa-item-time{font-size:9.5px;color:#9aa9b6;white-space:nowrap}
+@media (max-width:1100px){.mapa-layout{grid-template-columns:1fr}.mapa-leaflet{height:420px}}

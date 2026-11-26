@@ -64,6 +64,9 @@ npm run dev               # http://localhost:3000
 | POST | `/api/ubicaciones/me` | JWT (el socio comparte su ubicación) |
 | GET | `/api/ubicaciones/me` | JWT (última ubicación propia) |
 | GET | `/api/ubicaciones/:socioId` | JWT · ADMIN (última ubicación + historial) |
+| GET | `/api/ubicaciones/mapa/taxis` | JWT · ADMIN (mapa de taxis) |
+| GET | `/api/asistencias?fecha=AAAA-MM-DD` | JWT · ADMIN |
+| PUT | `/api/asistencias` | JWT · ADMIN (marcar asistencia del día) |
 | GET | `/api/solicitudes/cedula/:documento` | JWT (autocompletar nombres) |
 | GET | `/api/solicitudes?estado=&page=&limit=` | JWT · ADMIN |
 | POST | `/api/solicitudes` | JWT · ADMIN (genera enlace) |
@@ -203,6 +206,26 @@ descargar con sesión `ADMIN`: `GET /api/solicitudes/archivos/:id`.
 
 **Consulta de cédula (ZUINCONSUL):** `ZUINCONSUL_URL` + `ZUINCONSUL_TOKEN` en el backend. El token
 nunca se expone al navegador; el frontend llama a `GET /api/solicitudes/cedula/:documento`.
+
+## Asistencia (dentro de Votaciones)
+
+La pantalla de **Votaciones** tiene dos pestañas: **Elecciones** y **Asistencia** (solo `ADMIN`).
+En Asistencia se elige una fecha y se marca quién está presente, con búsqueda por nombre o cédula,
+contadores (presentes / ausentes / % de asistencia) y botones «Todos presentes» y «Limpiar».
+
+- Tabla `asistencias` (`fecha` + `socioId` único, `presente`, `registradoPor`).
+- Los socios retirados no aparecen en la lista.
+
+## Mapa de taxis (Leaflet)
+
+Módulo **Mapa** en el menú (solo `ADMIN`, debajo de Votaciones). Muestra en un mapa oscuro de Quito
+la última ubicación compartida por cada socio, con su unidad y placa.
+
+- Librería: **Leaflet + react-leaflet** con teselas Esri World Dark Gray (sin API key).
+- Colores: verde = operativa, ámbar = en trámite, rojo = suspendida / socio suspendido.
+- Panel lateral con los taxis conectados: al hacer clic el mapa vuela hasta el marcador.
+- Se refresca automáticamente cada minuto y trae `GET /api/ubicaciones/mapa/taxis`.
+- Sin ubicaciones muestra un aviso indicando que el socio debe compartirla desde su perfil.
 
 ## Asistente IA (DeepSeek)
 

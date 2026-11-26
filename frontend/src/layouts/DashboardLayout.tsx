@@ -3,7 +3,7 @@ import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
   LayoutDashboard, CarFront, UsersRound, UserRound,
-  Settings, Bell, Search, ChevronDown, LogOut, ShieldCheck, Vote,
+  Settings, Bell, Search, ChevronDown, LogOut, ShieldCheck, Vote, Map as MapIcon,
 } from 'lucide-react';
 import { useAuth } from '@features/auth';
 import { AssistantWidget } from '@features/assistant';
@@ -15,6 +15,7 @@ const navigation = [
   { label: 'Vehículos', path: '/vehiculos', icon: CarFront, roles: ['ADMIN'] },
   { label: 'Mi perfil', path: '/perfil', icon: UserRound, roles: ['SOCIO'] },
   { label: 'Votaciones', path: '/votaciones', icon: Vote, roles: ['ADMIN', 'SOCIO'] },
+  { label: 'Mapa', path: '/mapa', icon: MapIcon, roles: ['ADMIN'] },
 ];
 
 const ROLE_LABELS: Record<string, string> = {
