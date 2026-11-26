@@ -58,8 +58,29 @@ export class SequelizeAsistenciaRepository implements AsistenciaRepository {
     return this.findByFecha(fecha);
   }
 
-  private buildResumen(fecha: string, registros: AsistenciaResumen['registros']): AsistenciaResumen {
-    const presentes = registros.filter((registro) => registro.marcada && registro.presente).length;
+  async findUltimaFecha(): Promise<string | null> {
+    const row = (await AsistenciaModel.findOne({
+      attributes: ['fecha'],
+      order: [['fecha', 'DESC']],
+    })) as AsistenciaModel | null;
+
+    return row?.fecha ?? null;
+  }
+
+  async findUltimaBySocioId(socioId: string): Promise<{ fecha: string; presente: boolean } | null> {
+    const row = await AsistenciaModel.findOne({
+      where: { socioId },
+      order: [['fecha', 'DESC']],
+    });
+
+    return row ? { fecha: row.fecha, presente: Boolean(row.presente) } : null;
+  }
+
+  async countPresentesByFecha(fecha: string): Promise<number> {
+    return AsistenciaModel.count({ where: { fecha, presente: true } });
+  }
+
+  private buildResumen(fecha: string, registros: AsistenciaResumen['registros']): AsistenciaResumen {    const presentes = registros.filter((registro) => registro.marcada && registro.presente).length;
     const sinRegistrar = registros.filter((registro) => !registro.marcada).length;
 
     return {

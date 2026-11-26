@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { NavLink, Outlet, useLocation, useNavigate } from 'react-router-dom';
 import { AnimatePresence, motion } from 'framer-motion';
 import {
-  LayoutDashboard, CarFront, UsersRound, UserRound,
+  LayoutDashboard, CarFront, UsersRound, UserRound, BookOpen,
   Settings, Bell, Search, ChevronDown, LogOut, ShieldCheck, Vote, Map as MapIcon,
 } from 'lucide-react';
 import { useAuth } from '@features/auth';
@@ -12,6 +12,7 @@ import { EmergencyButton } from '@features/emergency';
 const navigation = [
   { label: 'Panel principal', path: '/', icon: LayoutDashboard, roles: ['ADMIN', 'SOCIO'] },
   { label: 'Socios', path: '/socios', icon: UsersRound, roles: ['ADMIN'] },
+  { label: 'Reglamento', path: '/reglamento', icon: BookOpen, roles: ['ADMIN', 'SOCIO'] },
   { label: 'Vehículos', path: '/vehiculos', icon: CarFront, roles: ['ADMIN'] },
   { label: 'Mi perfil', path: '/perfil', icon: UserRound, roles: ['SOCIO'] },
   { label: 'Votaciones', path: '/votaciones', icon: Vote, roles: ['ADMIN', 'SOCIO'] },

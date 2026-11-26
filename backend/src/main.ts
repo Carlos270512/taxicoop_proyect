@@ -14,6 +14,7 @@ import assistantRoutes from './lib/Assistant/infrastructure/assistant.routes';
 import ubicacionRoutes from './lib/Ubicacion/infrastructure/ubicacion.routes';
 import solicitudRoutes from './lib/Solicitud/infrastructure/solicitud.routes';
 import asistenciaRoutes from './lib/Asistencia/infrastructure/asistencia.routes';
+import reglamentoRoutes from './lib/Reglamento/infrastructure/reglamento.routes';
 
 dotenv.config();
 
@@ -56,6 +57,7 @@ async function bootstrap() {
     app.use('/api/ubicaciones', ubicacionRoutes);
     app.use('/api/solicitudes', solicitudRoutes);
     app.use('/api/asistencias', asistenciaRoutes);
+    app.use('/api/reglamentos', reglamentoRoutes);
    
 
     // Levantar servidor

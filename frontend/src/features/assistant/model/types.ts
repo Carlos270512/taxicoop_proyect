@@ -27,15 +27,15 @@ export type AssistantStatus = {
 /** Preguntas sugeridas para arrancar la conversacion. */
 export const SUGGESTIONS: Record<'ADMIN' | 'SOCIO', string[]> = {
   ADMIN: [
+    '¿Dónde está la unidad U-101?',
+    '¿Cómo está el socio Luis Mera?',
     '¿Cuántos socios activos hay?',
-    '¿Qué votaciones están abiertas?',
-    '¿Cómo suspendo a un socio?',
-    '¿Qué unidades están operativas?',
+    '¿Cómo quedó la última elección?',
   ],
   SOCIO: [
+    '¿Cómo quedó la última elección?',
+    '¿Asistí a la última reunión?',
     '¿Cuál es mi estado como socio?',
-    '¿Qué unidades tengo registradas?',
     '¿Qué votaciones puedo votar?',
-    '¿Cómo cambio mi teléfono?',
   ],
 };

@@ -67,6 +67,10 @@ npm run dev               # http://localhost:3000
 | GET | `/api/ubicaciones/mapa/taxis` | JWT · ADMIN (mapa de taxis) |
 | GET | `/api/asistencias?fecha=AAAA-MM-DD` | JWT · ADMIN |
 | PUT | `/api/asistencias` | JWT · ADMIN (marcar asistencia del día) |
+| GET | `/api/reglamentos` | JWT (ADMIN y SOCIO) |
+| GET | `/api/reglamentos/:id/archivo` | JWT (ver/descargar PDF descifrado) |
+| POST | `/api/reglamentos` | JWT · ADMIN (multipart, solo PDF) |
+| DELETE | `/api/reglamentos/:id` | JWT · ADMIN |
 | GET | `/api/solicitudes/cedula/:documento` | JWT (autocompletar nombres) |
 | GET | `/api/solicitudes?estado=&page=&limit=` | JWT · ADMIN |
 | POST | `/api/solicitudes` | JWT · ADMIN (genera enlace) |
@@ -207,6 +211,17 @@ descargar con sesión `ADMIN`: `GET /api/solicitudes/archivos/:id`.
 **Consulta de cédula (ZUINCONSUL):** `ZUINCONSUL_URL` + `ZUINCONSUL_TOKEN` en el backend. El token
 nunca se expone al navegador; el frontend llama a `GET /api/solicitudes/cedula/:documento`.
 
+## Reglamento
+
+Módulo **Reglamento** en el menú (debajo de Socios), visible para `ADMIN` y `SOCIO`.
+
+- El **administrador** sube uno o varios PDF (máximo 10 MB) indicando título y descripción;
+  también puede eliminar los que ya no estén vigentes.
+- El **socio** solo puede consultarlos: no ve los botones de subir ni eliminar (el backend
+  responde `403` si lo intenta).
+- Los PDF se guardan **cifrados** (AES-256-GCM) igual que los documentos de postulación y se
+  descifran al abrirlos en el navegador.
+
 ## Asistencia (dentro de Votaciones)
 
 La pantalla de **Votaciones** tiene dos pestañas: **Elecciones** y **Asistencia** (solo `ADMIN`).
@@ -255,6 +270,16 @@ Detalles de seguridad y costo:
 - Sin key configurada el endpoint responde `503` con un mensaje claro en el chat.
 - El asistente **solo informa** (no crea, edita ni borra registros) y el contexto de cada rol
   se arma en el backend: el socio solo recibe sus propios datos.
+
+Qué datos reales recibe el modelo en cada pregunta:
+
+| Rol | Contexto |
+|---|---|
+| `ADMIN` | Totales y actividad reciente · **ubicación de cada unidad con enlace de Google Maps** · listado de socios (cédula, estado, unidades, última asistencia) · resultados de la última elección · asistencia de la última reunión |
+| `SOCIO` | Sus datos y unidades · votaciones abiertas y si ya votó · **resultados de la última elección** (solo si está cerrada) · **su asistencia a la última reunión** |
+
+Ejemplos que ya responde: «¿Dónde está la unidad U-101?» (con link de Maps),
+«¿Cómo está el socio Luis Mera?», «¿Cómo quedó la última elección?», «¿Asistí a la última reunión?».
 
 ## Buenas prácticas del repositorio
 

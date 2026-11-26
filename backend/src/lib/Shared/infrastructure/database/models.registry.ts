@@ -14,6 +14,7 @@ import '../../../Ubicacion/infrastructure/models/Ubicacion.model';
 import '../../../Solicitud/infrastructure/models/Solicitud.model';
 import '../../../Solicitud/infrastructure/models/Archivo.model';
 import '../../../Asistencia/infrastructure/models/Asistencia.model';
+import '../../../Reglamento/infrastructure/models/Reglamento.model';
 
 
 export function registerModels() {

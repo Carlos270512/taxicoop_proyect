@@ -358,3 +358,14 @@
 .mapa-item-copy span{display:block;font-size:10.5px;color:#8b9aa8}
 .mapa-item-time{font-size:9.5px;color:#9aa9b6;white-space:nowrap}
 @media (max-width:1100px){.mapa-layout{grid-template-columns:1fr}.mapa-leaflet{height:420px}}
+/* ===== Reglamento ===== */
+.reglamento-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(320px,1fr));gap:12px}
+.reglamento-card{display:flex;align-items:flex-start;gap:12px;background:#fff;border:1px solid #e6ebf0;border-radius:14px;padding:14px;transition:.15s}
+.reglamento-card:hover{border-color:#cfe0ef;box-shadow:0 10px 24px rgba(19,44,71,.07)}
+.reglamento-icon{display:inline-flex;align-items:center;justify-content:center;width:40px;height:40px;border-radius:12px;background:#fdeceb;color:#c8382e;flex:0 0 auto}
+.reglamento-copy{flex:1;min-width:0}
+.reglamento-copy strong{display:block;font-size:12.5px;color:#26394c;line-height:1.35}
+.reglamento-copy span{display:block;font-size:11px;color:#7f8e9d;margin-top:4px;line-height:1.5}
+.reglamento-copy em{display:block;font-style:normal;font-size:10px;color:#9aa9b6;margin-top:6px;word-break:break-word}
+.reglamento-actions{display:flex;flex-direction:column;align-items:flex-end;gap:6px;flex:0 0 auto}
+@media (max-width:700px){.reglamento-grid{grid-template-columns:1fr}}
